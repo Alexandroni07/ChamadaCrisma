@@ -1,0 +1,26 @@
+.minha-turma-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.turma-info {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.turma-info h3 {
+  color: #2c3e50;
+  margin-top: 0;
+}
+
+.turma-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.turma-info li {
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #eee;
+}
