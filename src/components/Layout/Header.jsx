@@ -1,6 +1,6 @@
 import './Header.css'
 
-export const Header = () => {
+const Header = () => {
   return (
     <header className="site-header">
       <div className="header-content">
@@ -9,3 +9,5 @@ export const Header = () => {
     </header>
   )
 }
+
+export default Header;

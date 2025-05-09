@@ -1,7 +1,7 @@
 import './MinhaTurma.css'
 import { turmaData } from './Shared/data'
 
-export const MinhaTurma = () => {
+const MinhaTurma = () => {
   return (
     <div className="minha-turma-page">
       <h2>Minha Turma</h2>
@@ -20,3 +20,5 @@ export const MinhaTurma = () => {
     </div>
   )
 }
+
+export default MinhaTurma;
