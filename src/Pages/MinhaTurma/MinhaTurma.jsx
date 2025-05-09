@@ -1,5 +1,5 @@
 import './MinhaTurma.css'
-import { turmaData } from './Shared/data'
+import { turmaData } from '../Shared/data'
 
 const MinhaTurma = () => {
   return (
