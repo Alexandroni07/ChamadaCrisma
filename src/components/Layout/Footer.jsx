@@ -1,9 +1,11 @@
-import { Typography } from "@mui/material"
+import './Footer.css';
 
 const Footer = () => {
-    return(
-        <Typography>Footer</Typography>
-    )
-}
+  return (
+    <footer className="main-footer">
+      <p>© {new Date().getFullYear()} Paróquia São João - Todos os direitos reservados</p>
+    </footer>
+  );
+};
 
 export default Footer;
