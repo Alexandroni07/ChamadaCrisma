@@ -1,24 +1,29 @@
 import './MinhaTurma.css'
 import { turmaData } from '../Shared/data'
+import { Box, Card, Divider, MenuItem, Stack, Typography } from '@mui/material';
 
 const MinhaTurma = () => {
-  return (
-    <div className="minha-turma-page">
-      <h2>Minha Turma</h2>
-      <div className="turma-info">
-        <h3>{turmaData.nome}</h3>
-        <p><strong>Catequista:</strong> {turmaData.catequista}</p>
-        <p><strong>Encontros:</strong> {turmaData.encontros}</p>
-        
-        <h4>Membros:</h4>
-        <ul>
-          {turmaData.membros.map((membro, index) => (
-            <li key={index}>{membro}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
+    return (
+        <Box >
+            <Typography style={{ fontSize: 28, textAlign: 'center', marginBottom: 16 }}>Minha Turma</Typography>
+            <Box style={{ margin: "0px 32px" }} justifyContent={"space-between"}>
+                <Stack spacing={1}>
+                    <Typography>{turmaData.nome}</Typography>
+                    <Typography>Catequista: {turmaData.catequista}</Typography>
+                    <Typography>Encontros: {turmaData.encontros}</Typography>
+                </Stack>
+                <Card style={{ padding: 10, marginTop: 10 }}>
+                    <Typography style={{ fontWeight: 700 }}>Membros:</Typography>
+                    {turmaData.membros.map((membro, index) => (
+                        <Box key={index}>
+                            <MenuItem>{membro}</MenuItem>
+                            {index < turmaData.membros.length - 1 && <Divider />}
+                        </Box>
+                    ))}
+                </Card>
+            </Box>
+        </Box>
+    )
 }
 
 export default MinhaTurma;

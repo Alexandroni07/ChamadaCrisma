@@ -1,21 +1,20 @@
 import './App.css'
 import { BrowserRouter as Router } from 'react-router-dom'
-import Header from './components/Layout/Header'
-import SideNav from './components/SideNav/SideNav'
-import Footer from './components/Layout/Footer'
 import AppRoutes from './AppRoutes'
+import SideNav from './components/SideNav/SideNav'
+import { Grid } from '@mui/material'
 
 function App() {
   return (
     <Router>
-      <div className="app-container">
-        <Header />
-        <SideNav />
-        <main className="main-content">
+      <Grid container>
+        <Grid item >
+          <SideNav />
+        </Grid>
+        <Grid item size={"grow"}>
           <AppRoutes />
-        </main>
-        <Footer />
-      </div>
+        </Grid>
+      </Grid>
     </Router>
   )
 }

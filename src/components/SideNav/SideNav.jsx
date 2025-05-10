@@ -1,35 +1,90 @@
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { FaHome, FaHistory, FaSignOutAlt } from 'react-icons/fa';
-import './SideNav.css';
+import { useNavigate } from 'react-router-dom';
 
-export const SideNav = () => {
+const SideNav = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
+  const handleLogout = () => {
+    console.log("Usuário deslogado")
+  }
+
   return (
-    <div className="sidenav">
-      <div className="sidenav-header">
-        <h2>Crisma 2023</h2>
-      </div>
-      
-      <ul className="sidenav-links">
-        <li>
-          <a href="/" className="sidenav-link">
-            <FaHome className="sidenav-icon" />
-            <span>Minha Turma</span>
-          </a>
-        </li>
-        <li>
-          <a href="/historico" className="sidenav-link">
-            <FaHistory className="sidenav-icon" />
-            <span>Histórico</span>
-          </a>
-        </li>
-      </ul>
-      
-      <div className="sidenav-footer">
-        <a href="/logout" className="sidenav-link">
-          <FaSignOutAlt className="sidenav-icon" />
-          <span>Sair</span>
-        </a>
-      </div>
-    </div>
+    <Grid container direction={"column"}
+      style={{
+        backgroundColor: "#4169E1",
+        height: "100vh",
+        color: "white",
+        padding: 16
+      }}>
+      <Grid item style={{ flexGrow: 1 }}>
+        <Box >
+          <Typography style={{ fontSize: 28 }}>Crisma 2023</Typography>
+        </Box>
+        <Divider color={"white"} style={{ margin: "10px 0px" }} />
+
+        <Box display="flex" alignItems="center"
+          sx={{
+            '&:hover': {
+              backgroundColor: '#1E3A8A',
+            }
+          }}>
+          <FaHome style={{ marginRight: 8 }} />
+          <Button
+            onClick={() => handleNavigate('/')}
+            sx={{
+              color: 'white',
+              textTransform: 'none'
+            }}
+          >
+            Minha turma
+          </Button>
+        </Box>
+
+        <Box display="flex" alignItems="center"
+          sx={{
+            '&:hover': {
+              backgroundColor: '#1E3A8A',
+            }
+          }}>
+          <FaHistory style={{ marginRight: 8 }} />
+          <Button
+            onClick={() => handleNavigate('/historico')}
+            sx={{
+              color: 'white',
+              textTransform: 'none'
+            }}
+          >
+            Histórico
+          </Button>
+        </Box>
+
+      </Grid>
+      <Grid item>
+        <Box display="flex" justifyContent="flex-end">
+          <Box display="flex" alignItems="center"
+            sx={{
+              '&:hover': {
+                backgroundColor: '#1E3A8A',
+              }
+            }}>
+            <FaSignOutAlt />
+            <Button
+              type="button"
+              variant="text"
+              color='black'
+              onClick={handleLogout}
+            >
+              Sair
+            </Button>
+          </Box>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 

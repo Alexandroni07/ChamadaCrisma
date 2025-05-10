@@ -2,7 +2,7 @@ import { Typography } from "@mui/material"
 
 const Historico = () => {
     return (
-        <Typography>Deu bom</Typography>
+        <Typography var>Deu bom</Typography>
     )
 }
 
