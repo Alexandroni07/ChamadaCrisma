@@ -23,14 +23,16 @@ const SideNav = () => {
       }}>
       <Grid item style={{ flexGrow: 1 }}>
         <Box >
-          <Typography style={{ fontSize: 28 }}>Crisma 2023</Typography>
+          <Typography style={{ fontSize: 28 }}>Crisma 2025</Typography>
         </Box>
         <Divider color={"white"} style={{ margin: "10px 0px" }} />
 
-        <Box display="flex" alignItems="center"
+        <Box display="flex" alignItems="center" padding={1}
           sx={{
+            transition: 'background-color 0.3s ease',
             '&:hover': {
               backgroundColor: '#1E3A8A',
+              borderRadius: '8px'
             }
           }}>
           <FaHome style={{ marginRight: 8 }} />
@@ -45,10 +47,12 @@ const SideNav = () => {
           </Button>
         </Box>
 
-        <Box display="flex" alignItems="center"
+        <Box display="flex" alignItems="center" padding={1}
           sx={{
+            transition: 'background-color 0.3s ease',
             '&:hover': {
               backgroundColor: '#1E3A8A',
+              borderRadius: '8px'
             }
           }}>
           <FaHistory style={{ marginRight: 8 }} />
@@ -66,10 +70,12 @@ const SideNav = () => {
       </Grid>
       <Grid item>
         <Box display="flex" justifyContent="flex-end">
-          <Box display="flex" alignItems="center"
+          <Box display="flex" alignItems="center" padding={1}
             sx={{
+              transition: 'background-color 0.3s ease',
               '&:hover': {
                 backgroundColor: '#1E3A8A',
+                borderRadius: '8px'
               }
             }}>
             <FaSignOutAlt />
