@@ -9,7 +9,7 @@ const MinhaTurma = () => {
             </Card>
             <Box style={{ margin: "0px 32px" }} justifyContent={"space-between"}>
                 <Stack spacing={1}>
-                    <Typography>{turmaData.nome}</Typography>
+                    <Typography>Turma: {turmaData.turma}</Typography>
                     <Typography>Catequista: {turmaData.catequista}</Typography>
                     <Typography>Encontros: {turmaData.encontros}</Typography>
                 </Stack>

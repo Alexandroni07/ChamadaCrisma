@@ -1,5 +1,5 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
-import { FaHome, FaHistory, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaHistory, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const SideNav = () => {
@@ -75,7 +75,7 @@ const SideNav = () => {
               borderRadius: '8px'
             }
           }}>
-          <FaHistory style={{ marginRight: 8 }} />
+          <FaCalendarAlt style={{ marginRight: 8 }} />
           <Button
             onClick={() => handleNavigate('/chamada')}
             sx={{

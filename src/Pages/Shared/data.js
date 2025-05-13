@@ -1,5 +1,5 @@
 export const turmaData = {
-  nome: "Turma do Sagrado Coração",
+  turma: "2G",
   catequista: "Maria de Fátima",
   encontros: "Quintas-feiras, 19h30",
   membros: ["João", "Ana", "Carlos", "Mariana"]
