@@ -1,5 +1,4 @@
-import './MinhaTurma.css'
-import { turmaData } from '../Shared/data'
+import { turmaData } from './Shared/data'
 import { Box, Card, Divider, MenuItem, Stack, Typography } from '@mui/material';
 
 const MinhaTurma = () => {

@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
-import MinhaTurma from './Pages/MinhaTurma/MinhaTurma'
-import Historico from './Pages/Historico/Historico'
+import MinhaTurma from './Pages/MinhaTurma'
+import Historico from './Pages/Historico'
 
 const AppRoutes = () => {
   return (
