@@ -5,7 +5,9 @@ import { Box, Card, Divider, MenuItem, Stack, Typography } from '@mui/material';
 const MinhaTurma = () => {
     return (
         <Box >
+            <Card style={{ padding: 8, margin: "10px 32px" }} >
             <Typography style={{ fontSize: 28, textAlign: 'center', marginBottom: 16 }}>Minha Turma</Typography>
+            </Card>
             <Box style={{ margin: "0px 32px" }} justifyContent={"space-between"}>
                 <Stack spacing={1}>
                     <Typography>{turmaData.nome}</Typography>
