@@ -67,6 +67,26 @@ const SideNav = () => {
           </Button>
         </Box>
 
+        <Box display="flex" alignItems="center" padding={1}
+          sx={{
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#1E3A8A',
+              borderRadius: '8px'
+            }
+          }}>
+          <FaHistory style={{ marginRight: 8 }} />
+          <Button
+            onClick={() => handleNavigate('/chamada')}
+            sx={{
+              color: 'white',
+              textTransform: 'none'
+            }}
+          >
+            Chamada
+          </Button>
+        </Box>
+
       </Grid>
       <Grid item>
         <Box display="flex" justifyContent="flex-end">
