@@ -39,7 +39,8 @@ const MinhaTurma = () => {
       id_turma: turmaData.idTurma,
       responsavel: "",
       email: "",
-      telefone: ""
+      telefone: "",
+      id: turmaData.id
     }
     const crismando = await adicionarCrismando(payload);
 
@@ -69,15 +70,15 @@ const MinhaTurma = () => {
         <Card style={{ padding: 10, marginTop: 10 }}>
           <Typography style={{ fontWeight: 700 }}>Membros:</Typography>
           {membros.map((membro) => (
-            <Box key={`${membro.id_turma}-${membro.nome}`}>               <MenuItem
-              onClick={() => handleClick(membro.id_turma)}
+            <Box key={`${membro.id}-${membro.nome}`}>               <MenuItem
+              onClick={() => handleClick(membro.id)}
               style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
             >
               <Typography>{membro.nome}</Typography>
-              <Typography>{expandedId === membro.id_turma ? '▲' : '▼'}</Typography>
+              <Typography>{expandedId === membro.id ? '▲' : '▼'}</Typography>
             </MenuItem>
 
-              <Collapse in={expandedId === membro.id_turma} timeout="auto" unmountOnExit>
+              <Collapse in={expandedId === membro.id} timeout="auto" unmountOnExit>
                 <Card style={{ margin: '8px 0', backgroundColor: '#f5f5f5' }}>
                   <CardContent>
                     <Typography><strong>Nome:</strong> {membro.nome}</Typography>

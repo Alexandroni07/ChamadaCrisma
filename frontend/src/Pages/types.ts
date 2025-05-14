@@ -10,4 +10,5 @@ export type Crismando = {
     telefone: string;
     email: string;
     responsavel: string;
+    id: number;
 }
