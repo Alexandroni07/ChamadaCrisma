@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
       .from('crismandos')
       .insert([{ nome, id_turma }])
       .select()
-      .single(); // retorna um objeto em vez de array
+      .single();
 
     if (error) {
       throw error;
@@ -26,6 +26,28 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.error('Erro ao inserir crismando:', err);
     res.status(500).json({ erro: 'Erro interno no servidor.' });
+  }
+});
+
+// GET /api/crismandos
+router.get('/', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('crismandos')
+      .select('*')
+      .order('nome', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+res.status(200).json({
+  status: 200,
+  data: data
+});
+  } catch (err) {
+    console.error('Erro ao buscar crismandos:', err);
+    res.status(500).json({ erro: 'Erro ao buscar crismandos.' });
   }
 });
 
