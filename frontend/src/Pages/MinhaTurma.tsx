@@ -1,42 +1,54 @@
 import { turmaData } from './Shared/data';
 import { Box, Button, Card, Divider, MenuItem, Stack, TextField, Typography, Collapse, CardContent } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { adicionarCrismando, listarChamada } from './services';
+import { Crismando } from './types';
 
 const MinhaTurma = () => {
   const [novoNome, setNovoNome] = useState('');
   const [status, setStatus] = useState('');
   const [expandedId, setExpandedId] = useState(null);
+  const [membros, setMembros] = useState<Crismando[]>([]);
 
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const adicionarCrismando = async () => {
-    if (!novoNome) {
+  const carregarMembros = async () => {
+    const result = await listarChamada();
+    console.log(result)
+    if (result && result.status === 200) {
+      setMembros(result.data);
+    } else {
+      setStatus('Erro ao carregar membros.');
+    }
+  };
+
+  useEffect(() => {
+    carregarMembros();
+  }, []);
+
+  const handleAdicionar = async () => {
+    console.log("adicionado")
+    if (!novoNome.trim()) {
       setStatus('Nome não pode estar vazio.');
       return;
     }
+    const payload = {
+      nome: novoNome,
+      id_turma: turmaData.idTurma,
+      responsavel: "",
+      email: "",
+      telefone: ""
+    }
+    const crismando = await adicionarCrismando(payload);
 
-    try {
-      const response = await fetch('/api/crismandos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nome: novoNome,
-          id_turma: turmaData.id_turma ?? 1,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.erro || 'Erro ao adicionar crismando');
-      }
-
-      setStatus(`Crismando "${data.nome}" adicionado com sucesso!`);
+    if (crismando) {
+      setStatus(`Crismando "${crismando.data.nome}" adicionado com sucesso!`);
       setNovoNome('');
-    } catch (err) {
-      setStatus(`Erro: ${err.message}`);
+      await carregarMembros();
+    } else {
+      setStatus('Erro ao adicionar crismando.');
     }
   };
 
@@ -56,17 +68,16 @@ const MinhaTurma = () => {
 
         <Card style={{ padding: 10, marginTop: 10 }}>
           <Typography style={{ fontWeight: 700 }}>Membros:</Typography>
-          {turmaData.membros.map((membro) => (
-            <Box key={membro.id}>
-              <MenuItem 
-                onClick={() => handleClick(membro.id)}
-                style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
-              >
-                <Typography>{membro.nome}</Typography>
-                <Typography>{expandedId === membro.id ? '▲' : '▼'}</Typography>
-              </MenuItem>
-              
-              <Collapse in={expandedId === membro.id} timeout="auto" unmountOnExit>
+          {membros.map((membro) => (
+            <Box key={`${membro.id_turma}-${membro.nome}`}>               <MenuItem
+              onClick={() => handleClick(membro.id_turma)}
+              style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
+            >
+              <Typography>{membro.nome}</Typography>
+              <Typography>{expandedId === membro.id_turma ? '▲' : '▼'}</Typography>
+            </MenuItem>
+
+              <Collapse in={expandedId === membro.id_turma} timeout="auto" unmountOnExit>
                 <Card style={{ margin: '8px 0', backgroundColor: '#f5f5f5' }}>
                   <CardContent>
                     <Typography><strong>Nome:</strong> {membro.nome}</Typography>
@@ -76,7 +87,7 @@ const MinhaTurma = () => {
                   </CardContent>
                 </Card>
               </Collapse>
-              
+
               <Divider />
             </Box>
           ))}
@@ -92,7 +103,7 @@ const MinhaTurma = () => {
               size="small"
               fullWidth
             />
-            <Button variant="contained" onClick={adicionarCrismando}>
+            <Button variant="contained" onClick={handleAdicionar}>
               Adicionar
             </Button>
           </Stack>
