@@ -36,11 +36,10 @@ const MinhaTurma = () => {
     }
     const payload = {
       nome: novoNome,
-      id_turma: turmaData.idTurma,
+      id_turma: turmaData.id_turma,
       responsavel: "",
       email: "",
       telefone: "",
-      id: turmaData.id
     }
     const crismando = await adicionarCrismando(payload);
 

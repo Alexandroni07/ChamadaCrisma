@@ -2,6 +2,7 @@ export const turmaData = {
   turma: "2G",
   catequista: "Maria de Fátima",
   encontros: "Quintas-feiras, 19h30",
+  id_turma: 1,
   membros: [
     {
       id: 1,

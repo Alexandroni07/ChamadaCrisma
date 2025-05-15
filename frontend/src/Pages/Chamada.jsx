@@ -19,27 +19,23 @@ import {
 import { useState } from 'react';
 
 const Chamada = () => {
-  // Estados para controle da chamada
   const [chamadaIniciada, setChamadaIniciada] = useState(false);
   const [crismandoAtual, setCrismandoAtual] = useState(0);
   const [presencas, setPresencas] = useState({});
   const [frequenciaMissa, setFrequenciaMissa] = useState({});
   const [expandedId, setExpandedId] = useState(null);
 
-  // Inicia a chamada, expandindo o primeiro crismando
   const iniciarChamada = () => {
     setChamadaIniciada(true);
     setCrismandoAtual(0);
     setExpandedId(turmaData.membros[0].id);
   };
 
-  // Finaliza a chamada (limpa estados)
   const finalizarChamada = () => {
     setChamadaIniciada(false);
     setExpandedId(null);
   };
 
-  // Salva os dados (fictício - será substituído por chamada API)
   const salvarChamada = () => {
     console.log('Dados a serem salvos:', {
       presencas,
@@ -49,7 +45,6 @@ const Chamada = () => {
     finalizarChamada();
   };
 
-  // Avança para o próximo crismando na lista
   const proximoCrismando = () => {
     if (crismandoAtual < turmaData.membros.length - 1) {
       const nextId = turmaData.membros[crismandoAtual + 1].id;
@@ -58,7 +53,6 @@ const Chamada = () => {
     }
   };
 
-  // Volta para o crismando anterior
   const crismandoAnterior = () => {
     if (crismandoAtual > 0) {
       const prevId = turmaData.membros[crismandoAtual - 1].id;
@@ -67,7 +61,6 @@ const Chamada = () => {
     }
   };
 
-  // Manipuladores de eventos
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
@@ -78,7 +71,6 @@ const Chamada = () => {
       [id]: presente
     });
     
-    // Se marcou falta, remove a informação de missa
     if (!presente) {
       const newFrequencia = {...frequenciaMissa};
       delete newFrequencia[id];
@@ -102,14 +94,12 @@ const Chamada = () => {
       </Card>
       
       <Box style={{ margin: '0px 32px' }}>
-        {/* Cabeçalho com informações da turma */}
         <Stack spacing={1} mb={3}>
           <Typography>Turma: {turmaData.turma}</Typography>
           <Typography>Catequista: {turmaData.catequista}</Typography>
           <Typography>Encontros: {turmaData.encontros}</Typography>
         </Stack>
 
-        {/* Controles da chamada */}
         {!chamadaIniciada ? (
           <Button 
             variant="contained" 
@@ -147,7 +137,6 @@ const Chamada = () => {
           </Stack>
         )}
 
-        {/* Lista de crismandos */}
         <Card style={{ padding: 10 }}>
           <Typography style={{ fontWeight: 700, marginBottom: 2 }}>Membros:</Typography>
           
@@ -168,11 +157,9 @@ const Chamada = () => {
               
               <Collapse in={expandedId === membro.id} timeout="auto" unmountOnExit>
                 <Card style={{ margin: '8px 0', padding: '16px' }}>
-                  {/* Informações básicas */}
                   <Typography><strong>Nome:</strong> {membro.nome}</Typography>
                   <Typography><strong>Telefone:</strong> {membro.telefone}</Typography>
                   
-                  {/* Controles de presença */}
                   <FormControl component="fieldset" sx={{ mt: 2 }}>
                     <FormLabel component="legend">Presença:</FormLabel>
                     <RadioGroup
@@ -192,7 +179,6 @@ const Chamada = () => {
                     </RadioGroup>
                   </FormControl>
 
-                  {/* Controle de frequência na missa (só aparece se presente) */}
                   {presencas[membro.id] === true && (
                     <FormControl component="fieldset" sx={{ mt: 2 }}>
                       <FormLabel component="legend">Frequentou a missa?</FormLabel>
