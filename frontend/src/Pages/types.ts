@@ -6,9 +6,28 @@ export type DataResultGenericService<T> = {
 
 export type Crismando = {
     nome: string;
-    id_turma: number;
+    id_turma?: number;
     telefone: string;
     email: string;
     responsavel: string;
     id?: number;
+}
+
+export type TurmaData = {
+    turma: string;
+    catequista: string;
+    encontros: string;
+    id_turma: number;
+    membros: Crismando[]
+}
+
+export type Presenca = {
+    idCrismando: number;
+    tipoPresenca: TipoPresenca;
+    isPresente: boolean;
+}
+
+export enum TipoPresenca {
+    missa = 1,
+    catequese = 2
 }
