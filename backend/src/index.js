@@ -13,10 +13,12 @@ app.use(cors({
 require('dotenv').config();
 const crismandoRoutes = require('./routes/crismandos');
 const catequistaRoutes = require('./routes/catequistas');
+const encontrosRoute = require('./routes/encontros');
 
 app.use(express.json());
 app.use('/api/crismandos', crismandoRoutes);
 app.use('/api/catequistas', catequistaRoutes);
+app.use('/api/encontros', encontrosRoute);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
