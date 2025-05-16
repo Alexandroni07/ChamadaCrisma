@@ -8,10 +8,10 @@ function App() {
   return (
     <Router>
       <Grid container>
-        <Grid item >
+        <Grid >
           <SideNav />
         </Grid>
-        <Grid item size={"grow"}>
+        <Grid size={"grow"}>
           <AppRoutes />
         </Grid>
       </Grid>

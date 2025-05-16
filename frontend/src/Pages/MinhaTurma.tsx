@@ -1,18 +1,30 @@
 import { Box, Button, Card, CardContent, Collapse, Divider, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { adicionarCrismando, listarChamada } from './services';
+import { adicionarCrismando, ListarCatequistas, listarChamada } from './services';
 import { turmaData } from './Shared/data';
-import { Crismando } from './types';
+import { Catequista, Crismando } from './types';
 
 const MinhaTurma = () => {
   const [novoNome, setNovoNome] = useState('');
   const [status, setStatus] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [membros, setMembros] = useState<Crismando[]>([]);
+  const [catequista, setCatequista] = useState<Catequista[]>([]);
 
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
+
+  const carregarCatequista = async () => {
+    const result = await ListarCatequistas();
+    if (result && result.status === 200) {
+      setCatequista(result.data);
+    }
+  };
+
+  useEffect(() => {
+    carregarCatequista();
+  }, []);
 
   const carregarMembros = async () => {
     const result = await listarChamada();
@@ -44,7 +56,7 @@ const MinhaTurma = () => {
     const crismando = await adicionarCrismando(payload);
 
     if (crismando) {
-      setStatus(`Crismando "${crismando.data.nome}" adicionado com sucesso!`);
+      setStatus(`Crismando "${crismando.nome}" adicionado com sucesso!`);
       setNovoNome('');
       await carregarMembros();
     } else {
@@ -62,7 +74,9 @@ const MinhaTurma = () => {
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
           <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>Catequista: {turmaData.catequista}</Typography>
+          <Typography>catequistas: {catequista.length > 0
+            ? ' ' + catequista.map((c) => c.nome).join(', ')
+            : ' carregando...'}</Typography>
           <Typography>Encontros: {turmaData.encontros}</Typography>
         </Stack>
 

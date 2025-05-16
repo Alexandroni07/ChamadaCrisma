@@ -19,6 +19,13 @@ export type Catequista ={
     id?: number;
 }
 
+export type Encontros = {
+    id?: number;
+    data?: string;
+    in_tipo?: TipoPresenca;
+    id_turma?: number;
+}
+
 export type TurmaData = {
     turma: string;
     catequista: string;
@@ -34,6 +41,6 @@ export type Presenca = {
 }
 
 export enum TipoPresenca {
-    missa = 1,
-    catequese = 2
+    CATEQUESE = 1,
+    MISSA = 2
 }

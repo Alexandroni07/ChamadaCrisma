@@ -1,10 +1,34 @@
 import { turmaData, historicoData } from './Shared/data';
 import { Box, Card, Divider, MenuItem, Stack, Typography, Collapse, CardContent, FormControl, InputLabel, Select } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ListarCatequistas, ListarEncontros } from './services';
+import { Catequista, Encontros } from './types';
+import { formatarData } from './commons';
 
 const Historico = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  const [dataSelecionada, setDataSelecionada] = useState(historicoData[0].data);
+  const [dataSelecionada, setDataSelecionada] = useState<string>("");
+  const [catequista, setCatequista] = useState<Catequista[]>([]);
+  const [encontros, setEncontros] = useState<Encontros[]>([]);
+
+  const carregarCatequista = async () => {
+    const result = await ListarCatequistas();
+    if (result && result.status === 200) {
+      setCatequista(result.data);
+    }
+  };
+
+  const carregarEncontros = async () => {
+    const result = await ListarEncontros();
+    if (result && result.status === 200) {
+      setEncontros(result.data);
+    }
+  };
+
+  useEffect(() => {
+    carregarCatequista();
+    carregarEncontros();
+  }, []);
 
   return (
     <Box>
@@ -13,12 +37,14 @@ const Historico = () => {
           Histórico
         </Typography>
       </Card>
-      
+
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
           <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>Catequista: {turmaData.catequista}</Typography>
-        </Stack>
+          <Typography>catequistas: {catequista.length > 0
+            ? ' ' + catequista.map((c) => c.nome).join(', ')
+            : ' carregando...'}</Typography>
+          <Typography>Encontros: {turmaData.encontros}</Typography>        </Stack>
 
         <Card style={{ padding: 10, marginTop: 10 }}>
           <FormControl size="small" sx={{ minWidth: 120, mb: 2 }}>
@@ -28,9 +54,9 @@ const Historico = () => {
               onChange={(e) => setDataSelecionada(e.target.value)}
               label="Data"
             >
-              {historicoData.map((item) => (
+              {encontros.map((item) => (
                 <MenuItem key={item.data} value={item.data}>
-                  {item.data}
+                  {item.data ? formatarData(item.data) : 'Data inválida'}
                 </MenuItem>
               ))}
             </Select>

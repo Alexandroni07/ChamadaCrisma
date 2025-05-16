@@ -22,10 +22,8 @@ const Chamada = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const [catequista, setCatequista] = useState<Catequista[]>([]);
 
-
     const carregarCatequista = async () => {
         const result = await ListarCatequistas();
-        console.log(result)
         if (result && result.status === 200) {
             setCatequista(result.data);
         }
@@ -33,7 +31,6 @@ const Chamada = () => {
 
     useEffect(() => {
         carregarCatequista();
-        console.log(1)
     }, []);
 
     const isPresente = (idParam: number, tipoPresencaParam: TipoPresenca) => {
@@ -106,7 +103,7 @@ const Chamada = () => {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={isPresente(membro.id, TipoPresenca.catequese)}
+                                                    checked={isPresente(membro.id, TipoPresenca.CATEQUESE)}
                                                     name="presencaCatequese"
                                                     disabled={true}
                                                 />
@@ -117,7 +114,7 @@ const Chamada = () => {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={isPresente(membro.id, TipoPresenca.missa)}
+                                                    checked={isPresente(membro.id, TipoPresenca.MISSA)}
                                                     name="presencaMissa"
                                                     disabled={true}
                                                 />

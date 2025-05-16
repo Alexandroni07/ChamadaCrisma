@@ -21,7 +21,7 @@ const SideNav = () => {
         color: "white",
         padding: 16
       }}>
-      <Grid item style={{ flexGrow: 1 }}>
+      <Grid style={{ flexGrow: 1 }}>
         <Box >
           <Typography style={{ fontSize: 28 }}>Crisma 2025</Typography>
         </Box>
@@ -88,7 +88,7 @@ const SideNav = () => {
         </Box>
 
       </Grid>
-      <Grid item>
+      <Grid>
         <Box display="flex" justifyContent="flex-end">
           <Box display="flex" alignItems="center" padding={1}
             sx={{
