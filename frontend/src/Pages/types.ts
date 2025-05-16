@@ -40,6 +40,12 @@ export type Presenca = {
     isPresente: boolean;
 }
 
+export interface PresencaInput {
+  idCrismando: number;
+  tipoPresenca: number;
+  isPresente: boolean;
+}
+
 export enum TipoPresenca {
     CATEQUESE = 1,
     MISSA = 2

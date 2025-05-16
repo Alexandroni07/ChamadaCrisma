@@ -13,14 +13,15 @@ import {
 import { useEffect, useCallback, useState } from 'react';
 import ChamadaModal from '../modals/ChamadaModal';
 import { turmaData } from './Shared/data';
-import { Presenca, TipoPresenca } from './types';
+import { Crismando, Presenca, TipoPresenca } from './types';
 import { Catequista } from './types';
-import { ListarCatequistas } from './services';
+import { ListarCatequistas, listarChamada } from './services';
 
 const Chamada = () => {
     const [presenca, setPresenca] = useState<Presenca[]>([]);
     const [modalAberto, setModalAberto] = useState(false);
     const [catequista, setCatequista] = useState<Catequista[]>([]);
+    const [membros, setMembros] = useState<Crismando[]>([]);
 
     const carregarCatequista = async () => {
         const result = await ListarCatequistas();
@@ -29,14 +30,27 @@ const Chamada = () => {
         }
     };
 
+    const carregarMembros = async () => {
+        const result = await listarChamada();
+        console.log(result)
+        if (result && result.status === 200) {
+            setMembros(result.data);
+        }
+    };
+
     useEffect(() => {
+        carregarMembros();
         carregarCatequista();
     }, []);
 
-    const isPresente = (idParam: number, tipoPresencaParam: TipoPresenca) => {
-        return presenca.find(
-            (p) => p.idCrismando === idParam && p.tipoPresenca === tipoPresencaParam
-        )?.isPresente ?? false;
+    const isPresente = (
+        idCrismando: number,
+        tipoPresenca: TipoPresenca
+    ): boolean | null => {
+        const registro = presenca.find(
+            (p) => p.idCrismando === idCrismando && p.tipoPresenca === tipoPresenca
+        );
+        return registro?.isPresente ?? null;
     };
 
     const iniciarChamada = () => {
@@ -52,7 +66,7 @@ const Chamada = () => {
             <ChamadaModal
                 modalAberto={modalAberto}
                 setModalAberto={setModalAberto}
-                turmaData={turmaData}
+                crismandos={membros}
                 isPresente={isPresente}
                 handleGetPresenca={handleGetPresenca}
             />
@@ -84,7 +98,7 @@ const Chamada = () => {
                 <Card style={{ padding: 10 }}>
                     <Typography style={{ fontWeight: 700, marginBottom: 2 }}>Membros:</Typography>
 
-                    {turmaData.membros.map((membro) => (
+                    {membros.length > 0 ? membros.map((membro) => (
                         <Box key={membro.id}>
                             <MenuItem
                                 style={{
@@ -103,18 +117,17 @@ const Chamada = () => {
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={isPresente(membro.id, TipoPresenca.CATEQUESE)}
+                                                    checked={isPresente(membro.id!, TipoPresenca.CATEQUESE) === true}
                                                     name="presencaCatequese"
                                                     disabled={true}
                                                 />
                                             }
                                             label="Presença Catequese"
                                         />
-
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={isPresente(membro.id, TipoPresenca.MISSA)}
+                                                    checked={isPresente(membro.id!, TipoPresenca.MISSA) === true}
                                                     name="presencaMissa"
                                                     disabled={true}
                                                 />
@@ -126,7 +139,7 @@ const Chamada = () => {
                             </MenuItem>
                             <Divider />
                         </Box>
-                    ))}
+                    )) : <Typography>Carregando...</Typography>} {/*Colocar componente de loading aqui */}
                 </Card>
             </Box>
         </Box>

@@ -22,10 +22,6 @@ const MinhaTurma = () => {
     }
   };
 
-  useEffect(() => {
-    carregarCatequista();
-  }, []);
-
   const carregarMembros = async () => {
     const result = await listarChamada();
     console.log(result)
@@ -38,6 +34,7 @@ const MinhaTurma = () => {
 
   useEffect(() => {
     carregarMembros();
+    carregarCatequista();
   }, []);
 
   const handleAdicionar = async () => {

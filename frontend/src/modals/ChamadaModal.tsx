@@ -1,26 +1,20 @@
-import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, Modal, Stack, Typography } from '@mui/material';
 import { ChamadaModalProps } from './types';
 import { useEffect, useState } from 'react';
 import { Presenca, TipoPresenca } from '../Pages/types';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { registrarChamada } from '../Pages/services';
+import { turmaData } from '../Pages/Shared/data';
 
 const ChamadaModal = ({
     modalAberto,
     setModalAberto,
-    turmaData,
+    crismandos,
     isPresente,
     handleGetPresenca
 }: ChamadaModalProps) => {
     const [indiceAtual, setIndiceAtual] = useState(0);
     const [presenca, setPresenca] = useState<Presenca[]>([]);
-
-    const avancar = () => {
-        if (indiceAtual < turmaData.membros.length - 1) {
-            setIndiceAtual((prev) => prev + 1);
-        } else {
-            setModalAberto(false);
-        }
-    };
 
     useEffect(() => {
         if (presenca) {
@@ -28,7 +22,23 @@ const ChamadaModal = ({
         }
     }, [presenca]);
 
-    const voltar = () => {
+    const handleAvancar = () => {
+    const idsComPresenca = new Set(
+        presenca.map((p) => p.idCrismando)
+    );
+
+    const proximoIndice = crismandos.findIndex(
+        (c, index) => index > indiceAtual && !idsComPresenca.has(c.id!)
+    );
+
+    if (proximoIndice !== -1) {
+        setIndiceAtual(proximoIndice);
+    } else {
+        setModalAberto(false);
+    }
+};
+
+    const handleVoltar = () => {
         if (indiceAtual > 0) {
             setIndiceAtual((prev) => prev - 1);
         }
@@ -61,6 +71,47 @@ const ChamadaModal = ({
         });
     };
 
+    const salvarChamada = async () => {
+        try {
+            const sucesso = await registrarChamada(turmaData.id_turma, presenca);
+            if (sucesso) {
+                alert('Chamada registrada com sucesso!');
+                setModalAberto(false);
+            } else {
+                alert('Erro ao registrar chamada.');
+            }
+        } catch (error) {
+            alert('Erro ao registrar chamada.');
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        const crismandoAtual = crismandos[indiceAtual];
+
+        if (!crismandoAtual?.id) return;
+
+        const temCatequese = presenca.some(
+            (p) =>
+                p.idCrismando === crismandoAtual.id &&
+                p.tipoPresenca === TipoPresenca.CATEQUESE
+        );
+
+        const temMissa = presenca.some(
+            (p) =>
+                p.idCrismando === crismandoAtual.id &&
+                p.tipoPresenca === TipoPresenca.MISSA
+        );
+
+        if (temCatequese && temMissa) {
+            const timeout = setTimeout(() => {
+                handleAvancar();
+            }, 300);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [presenca, indiceAtual, crismandos]);
+
     return (
         <Modal open={modalAberto} onClose={() => setModalAberto(false)}>
             <Box
@@ -77,112 +128,132 @@ const ChamadaModal = ({
                 }}
             >
                 <Box display="flex" alignItems="center" justifyContent={"space-between"} >
-                    <FaChevronLeft style={{ marginRight: 8 }} />
+                    <Button
+                        onClick={handleVoltar}
+                        disabled={indiceAtual === 0}
+                    >
+                        <FaChevronLeft size={30} />
+                    </Button>
                     <Typography variant="h6" alignItems={"end"}>
-                        {turmaData.membros[indiceAtual]?.nome}
+                        {crismandos[indiceAtual]?.nome}
                     </Typography>
-                    <FaChevronRight style={{ marginRight: 8 }} />
+                    <Button
+                        onClick={handleAvancar}
+                        disabled={indiceAtual === crismandos.length}
+                    >
+                        <FaChevronRight size={30} />
+                    </Button>
                 </Box>
-                <Stack spacing={1}>
-                    <Typography variant="subtitle1">Catequese</Typography>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isPresente(
-                                        turmaData.membros[indiceAtual].id,
-                                        TipoPresenca.catequese
-                                    )}
-                                    onChange={(e) =>
-                                        handlePresencaChange(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.catequese,
-                                            e.target.checked
-                                        )
-                                    }
-                                />
-                            }
-                            label="Presente"
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={
-                                        !isPresente(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.catequese
-                                        )
-                                    }
-                                    onChange={(e) =>
-                                        handlePresencaChange(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.catequese,
-                                            e.target.checked
-                                        )
-                                    }
-                                />
-                            }
-                            label="Falta"
-                        />
-                    </Stack>
-                </Stack>
 
-                <Stack spacing={1}>
-                    <Typography variant="subtitle1">Missa</Typography>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={isPresente(
-                                        turmaData.membros[indiceAtual].id,
-                                        TipoPresenca.missa
-                                    )}
-                                    onChange={(e) =>
-                                        handlePresencaChange(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.missa,
-                                            e.target.checked
-                                        )
-                                    }
-                                />
-                            }
-                            label="Presente"
-                        />
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={
-                                        !isPresente(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.missa
-                                        )
-                                    }
-                                    onChange={(e) =>
-                                        handlePresencaChange(
-                                            turmaData.membros[indiceAtual].id,
-                                            TipoPresenca.missa,
-                                            e.target.checked
-                                        )
-                                    }
-                                />
-                            }
-                            label="Falta"
-                        />
+                <Grid container direction={"column"} style={{ margin: "10px 0px" }} gap={2}>
+                    <Stack spacing={1} style={{ border: '2px solid', borderRadius: 6, borderColor: "#bae4f9", padding: 6 }}>
+                        <Typography variant="subtitle1">Catequese</Typography>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={
+                                            isPresente(crismandos[indiceAtual]?.id, TipoPresenca.CATEQUESE) === true
+                                        }
+                                        onChange={() =>
+                                            handlePresencaChange(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.CATEQUESE,
+                                                true
+                                            )
+                                        }
+                                    />
+                                }
+                                label="Presente"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={
+                                            isPresente(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.CATEQUESE
+                                            ) === false
+                                        }
+                                        onChange={() =>
+                                            handlePresencaChange(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.CATEQUESE,
+                                                false
+                                            )
+                                        }
+                                    />
+                                }
+                                label="Falta"
+                            />
+
+                        </Stack>
                     </Stack>
-                </Stack>
+
+                    <Stack spacing={1} style={{ border: '2px solid', borderRadius: 6, borderColor: "#bae4f9", padding: 6 }}>
+                        <Typography variant="subtitle1">Missa</Typography>
+                        <Stack direction="row" spacing={2} alignItems="center">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={
+                                            isPresente(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.MISSA
+                                            ) === true
+                                        }
+                                        onChange={() =>
+                                            handlePresencaChange(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.MISSA,
+                                                true
+                                            )
+                                        }
+                                    />
+                                }
+                                label="Presente"
+                            />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={
+                                            isPresente(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.MISSA
+                                            ) === false
+                                        }
+                                        onChange={() =>
+                                            handlePresencaChange(
+                                                crismandos[indiceAtual]?.id,
+                                                TipoPresenca.MISSA,
+                                                false
+                                            )
+                                        }
+                                    />
+                                }
+                                label="Falta"
+                            />
+
+                        </Stack>
+                    </Stack>
+                </Grid>
 
                 <Box display="flex" justifyContent="space-between">
                     <Button
-                        onClick={voltar}
-                        disabled={indiceAtual === 0}
-                        variant="outlined"
+                        onClick={() => setModalAberto(false)}
+                        variant="contained"
                     >
-                        Voltar
+                        {'Fechar'}
                     </Button>
 
-                    <Button onClick={avancar} variant="contained">
-                        {indiceAtual === turmaData.membros.length - 1 ? 'Finalizar' : 'Avançar'}
+                    <Button
+                        onClick={salvarChamada}
+                        disabled={indiceAtual !== crismandos.length}
+                        variant="contained"
+                    >
+                        {'Finalizar'}
                     </Button>
+
                 </Box>
             </Box>
         </Modal>

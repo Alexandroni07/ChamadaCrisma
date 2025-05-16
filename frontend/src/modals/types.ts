@@ -1,9 +1,9 @@
-import { Presenca, TurmaData } from "../Pages/types";
+import { Crismando, Presenca, TurmaData } from "../Pages/types";
 
 export interface ChamadaModalProps {
     modalAberto: boolean;
     setModalAberto: (boolean) => void;
-    turmaData: TurmaData;
-    isPresente: (number, TipoPresenca) => boolean;
+    crismandos: Crismando[];
+    isPresente: (number, TipoPresenca) => boolean | null;
     handleGetPresenca: (Presenca) => void;
 }
