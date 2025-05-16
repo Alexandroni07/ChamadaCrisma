@@ -51,4 +51,26 @@ res.status(200).json({
   }
 });
 
+// GET /api/catequistas
+router.get('/catequistas', async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from('catequistas')
+      .select('*')
+      .order('nome', { ascending: true });
+
+    if (error) {
+      throw error;
+    }
+
+res.status(200).json({
+  status: 200,
+  data: data
+});
+  } catch (err) {
+    console.error('Erro ao buscar catequista:', err);
+    res.status(500).json({ erro: 'Erro ao buscar catequista.' });
+  }
+});
+
 module.exports = router;
