@@ -1,14 +1,14 @@
-import { Routes, Route } from 'react-router-dom'
-import MinhaTurma from './Pages/MinhaTurma'
+import { Route, Routes } from 'react-router-dom'
+import Chamada from './Pages/Chamada'
 import Historico from './Pages/Historico'
-import Chamada2 from './Pages/Chamada2'
+import MinhaTurma from './Pages/MinhaTurma'
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<MinhaTurma />} />
       <Route path="/historico" element={<Historico />} />
-      <Route path="/chamada" element={<Chamada2 />} />
+      <Route path="/chamada" element={<Chamada />} />
     </Routes>
   )
 }

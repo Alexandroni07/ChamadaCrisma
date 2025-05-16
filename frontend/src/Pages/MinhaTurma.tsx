@@ -1,7 +1,7 @@
-import { turmaData } from './Shared/data';
-import { Box, Button, Card, Divider, MenuItem, Stack, TextField, Typography, Collapse, CardContent } from '@mui/material';
+import { Box, Button, Card, CardContent, Collapse, Divider, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { adicionarCrismando, listarChamada } from './services';
+import { turmaData } from './Shared/data';
 import { Crismando } from './types';
 
 const MinhaTurma = () => {
