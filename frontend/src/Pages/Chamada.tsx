@@ -10,14 +10,31 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import ChamadaModal from '../modals/ChamadaModal';
 import { turmaData } from './Shared/data';
 import { Presenca, TipoPresenca } from './types';
+import { Catequista } from './types';
+import { ListarCatequistas } from './services';
 
 const Chamada = () => {
     const [presenca, setPresenca] = useState<Presenca[]>([]);
     const [modalAberto, setModalAberto] = useState(false);
+    const [catequista, setCatequista] = useState<Catequista[]>([]);
+
+
+    const carregarCatequista = async () => {
+        const result = await ListarCatequistas();
+        console.log(result)
+        if (result && result.status === 200) {
+          setCatequista(result.data);
+        } 
+      };
+    
+      useEffect(() => {
+        carregarCatequista();
+        console.log(1)
+      }, []);
 
     const isPresente = (idParam: number, tipoPresencaParam: TipoPresenca) => {
         return presenca.find(

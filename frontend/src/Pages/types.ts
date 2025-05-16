@@ -13,6 +13,12 @@ export type Crismando = {
     id?: number;
 }
 
+export type Catequista ={
+    nome: string;
+    id_turma?: number;
+    id?: number;
+}
+
 export type TurmaData = {
     turma: string;
     catequista: string;
