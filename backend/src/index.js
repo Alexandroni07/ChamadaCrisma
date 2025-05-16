@@ -12,7 +12,7 @@ app.use(cors({
 
 require('dotenv').config();
 const crismandoRoutes = require('./routes/crismandos');
-const catequistaRoutes = require('./routes/crismandos');
+const catequistaRoutes = require('./routes/catequistas');
 
 app.use(express.json());
 app.use('/api/crismandos', crismandoRoutes);
