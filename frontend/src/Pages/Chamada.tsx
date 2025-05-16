@@ -10,10 +10,10 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import { turmaData } from './Shared/data';
-import { useCallback, useRef, useState } from 'react';
-import { Presenca, TipoPresenca } from './types';
+import { useCallback, useState } from 'react';
 import ChamadaModal from '../modals/ChamadaModal';
+import { turmaData } from './Shared/data';
+import { Presenca, TipoPresenca } from './types';
 
 const Chamada = () => {
     const [presenca, setPresenca] = useState<Presenca[]>([]);
