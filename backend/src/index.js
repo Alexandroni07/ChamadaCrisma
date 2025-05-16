@@ -13,15 +13,16 @@ app.use(cors({
 require('dotenv').config();
 const crismandoRoutes = require('./routes/crismandos');
 const catequistaRoutes = require('./routes/catequistas');
-const encontrosRoute = require('./routes/encontros');
+const encontroRoutes = require('./routes/encontros');
+const chamadaRoutes = require('./routes/chamada');
 
 app.use(express.json());
 app.use('/api/crismandos', crismandoRoutes);
 app.use('/api/catequistas', catequistaRoutes);
-app.use('/api/encontros', encontrosRoute);
+app.use('/api/encontros', encontroRoutes);
+app.use('/api/chamada', chamadaRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Servidor rodando na porta ${port}`);
 });
-
