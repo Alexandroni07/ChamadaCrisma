@@ -2,6 +2,7 @@ import { Box, Button, Checkbox, FormControlLabel, Modal, Stack, Typography } fro
 import { ChamadaModalProps } from './types';
 import { useEffect, useState } from 'react';
 import { Presenca, TipoPresenca } from '../Pages/types';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 const ChamadaModal = ({
     modalAberto,
@@ -75,48 +76,99 @@ const ChamadaModal = ({
                     width: 400
                 }}
             >
-                <Typography variant="h6" mb={2}>
-                    {turmaData.membros[indiceAtual]?.nome}
-                </Typography>
-
-                <Stack direction="column" spacing={2} mb={3}>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={isPresente(
-                                    turmaData.membros[indiceAtual].id,
-                                    TipoPresenca.catequese
-                                )}
-                                onChange={(e) =>
-                                    handlePresencaChange(
+                <Box display="flex" alignItems="center" justifyContent={"space-between"} >
+                    <FaChevronLeft style={{ marginRight: 8 }} />
+                    <Typography variant="h6" alignItems={"end"}>
+                        {turmaData.membros[indiceAtual]?.nome}
+                    </Typography>
+                    <FaChevronRight style={{ marginRight: 8 }} />
+                </Box>
+                <Stack spacing={1}>
+                    <Typography variant="subtitle1">Catequese</Typography>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isPresente(
                                         turmaData.membros[indiceAtual].id,
-                                        TipoPresenca.catequese,
-                                        e.target.checked
-                                    )
-                                }
-                            />
-                        }
-                        label="Presença Catequese"
-                    />
+                                        TipoPresenca.catequese
+                                    )}
+                                    onChange={(e) =>
+                                        handlePresencaChange(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.catequese,
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                            }
+                            label="Presente"
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={
+                                        !isPresente(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.catequese
+                                        )
+                                    }
+                                    onChange={(e) =>
+                                        handlePresencaChange(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.catequese,
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                            }
+                            label="Falta"
+                        />
+                    </Stack>
+                </Stack>
 
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={isPresente(
-                                    turmaData.membros[indiceAtual].id,
-                                    TipoPresenca.missa
-                                )}
-                                onChange={(e) =>
-                                    handlePresencaChange(
+                <Stack spacing={1}>
+                    <Typography variant="subtitle1">Missa</Typography>
+                    <Stack direction="row" spacing={2} alignItems="center">
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isPresente(
                                         turmaData.membros[indiceAtual].id,
-                                        TipoPresenca.missa,
-                                        e.target.checked
-                                    )
-                                }
-                            />
-                        }
-                        label="Presença Missa"
-                    />
+                                        TipoPresenca.missa
+                                    )}
+                                    onChange={(e) =>
+                                        handlePresencaChange(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.missa,
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                            }
+                            label="Presente"
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={
+                                        !isPresente(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.missa
+                                        )
+                                    }
+                                    onChange={(e) =>
+                                        handlePresencaChange(
+                                            turmaData.membros[indiceAtual].id,
+                                            TipoPresenca.missa,
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                            }
+                            label="Falta"
+                        />
+                    </Stack>
                 </Stack>
 
                 <Box display="flex" justifyContent="space-between">

@@ -27,14 +27,14 @@ const Chamada = () => {
         const result = await ListarCatequistas();
         console.log(result)
         if (result && result.status === 200) {
-          setCatequista(result.data);
-        } 
-      };
-    
-      useEffect(() => {
+            setCatequista(result.data);
+        }
+    };
+
+    useEffect(() => {
         carregarCatequista();
         console.log(1)
-      }, []);
+    }, []);
 
     const isPresente = (idParam: number, tipoPresencaParam: TipoPresenca) => {
         return presenca.find(
@@ -68,7 +68,9 @@ const Chamada = () => {
             <Box style={{ margin: '0px 32px' }}>
                 <Stack spacing={1} mb={3}>
                     <Typography>Turma: {turmaData.turma}</Typography>
-                    <Typography>Catequista: {turmaData.catequista}</Typography>
+                    <Typography>catequistas: {catequista.length > 0
+                        ? ' ' + catequista.map((c) => c.nome).join(', ')
+                        : ' carregando...'}</Typography>
                     <Typography>Encontros: {turmaData.encontros}</Typography>
                 </Stack>
 
