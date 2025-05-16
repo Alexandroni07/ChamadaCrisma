@@ -22,6 +22,10 @@ const ChamadaModal = ({
         }
     }, [presenca]);
 
+    useEffect(() => {
+        setIndiceAtual(0)
+    }, [modalAberto]);
+
     const handleAvancar = () => {
     const idsComPresenca = new Set(
         presenca.map((p) => p.idCrismando)
