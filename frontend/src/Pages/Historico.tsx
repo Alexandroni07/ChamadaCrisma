@@ -1,8 +1,8 @@
 import { turmaData, historicoData } from './Shared/data';
 import { Box, Card, Divider, MenuItem, Stack, Typography, Collapse, CardContent, FormControl, InputLabel, Select } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { ListarCatequistas, ListarEncontros } from './services';
-import { Catequista, Encontros } from './types';
+import { ListarCatequistas, ListarEncontros, listarChamada } from './services';
+import { Catequista, Encontros, Crismando } from './types';
 import { formatarData } from './commons';
 
 const Historico = () => {
@@ -10,11 +10,23 @@ const Historico = () => {
   const [dataSelecionada, setDataSelecionada] = useState<string>("");
   const [catequista, setCatequista] = useState<Catequista[]>([]);
   const [encontros, setEncontros] = useState<Encontros[]>([]);
+  const [membros, setMembros] = useState<Crismando[]>([]);
+
+  const handleClick = (id) => {
+    setExpandedId(expandedId === id ? null : id);
+  };
 
   const carregarCatequista = async () => {
     const result = await ListarCatequistas();
     if (result && result.status === 200) {
       setCatequista(result.data);
+    }
+  };
+
+   const carregarMembros = async () => {
+    const result = await listarChamada();
+    if (result && result.status === 200) {
+      setMembros(result.data);
     }
   };
 
@@ -28,6 +40,7 @@ const Historico = () => {
   useEffect(() => {
     carregarCatequista();
     carregarEncontros();
+    carregarMembros();
   }, []);
 
   return (
@@ -47,9 +60,9 @@ const Historico = () => {
           <Typography>Encontros: {turmaData.encontros}</Typography>        </Stack>
 
         <Card style={{ padding: 10, 
-                    marginTop: 8,
-                    maxHeight: 'calc(60vh - 15px)', // Ajuste este valor conforme necessário
-                    overflow: 'auto' }}>
+          marginTop: 10,
+          maxHeight: 'calc(73vh - 15px)', // Ajuste este valor conforme necessário
+          overflow: 'auto'}}>
           <FormControl size="small" sx={{ minWidth: 120, mb: 2 }}>
             <InputLabel>Data</InputLabel>
             <Select
@@ -65,10 +78,10 @@ const Historico = () => {
             </Select>
           </FormControl>
 
-          {turmaData.membros.map((membro) => (
+          {membros.map((membro) => ( // Alterado de turmaData.membros para membros
             <Box key={membro.id}>
               <MenuItem
-                onClick={() => setExpandedId(expandedId === membro.id ? null : membro.id)}
+                onClick={() => handleClick(membro.id)}
                 style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
               >
                 <Typography>{membro.nome}</Typography>
@@ -81,6 +94,8 @@ const Historico = () => {
                     <Typography><strong>Data selecionada:</strong> {dataSelecionada}</Typography>
                     <Typography><strong>Nome:</strong> {membro.nome}</Typography>
                     <Typography><strong>Telefone:</strong> {membro.telefone}</Typography>
+                    <Typography><strong>Email:</strong> {membro.email}</Typography>
+                    <Typography><strong>Responsável:</strong> {membro.responsavel}</Typography>
                   </CardContent>
                 </Card>
               </Collapse>
