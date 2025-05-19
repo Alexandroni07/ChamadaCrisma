@@ -77,32 +77,38 @@ const MinhaTurma = () => {
           <Typography>Encontros: {turmaData.encontros}</Typography>
         </Stack>
 
-        <Card style={{ padding: 10, marginTop: 10 }}>
-          <Typography style={{ fontWeight: 700 }}>Membros:</Typography>
-          {membros.map((membro) => (
-            <Box key={`${membro.id}-${membro.nome}`}>               <MenuItem
-              onClick={() => handleClick(membro.id)}
-              style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
-            >
-              <Typography>{membro.nome}</Typography>
-              <Typography>{expandedId === membro.id ? '▲' : '▼'}</Typography>
-            </MenuItem>
+        <Card style={{ 
+  padding: 10, 
+  marginTop: 10,
+  maxHeight: 'calc(53vh - 15px)', // Ajuste este valor conforme necessário
+  overflow: 'auto'
+}}>
+  <Typography style={{ fontWeight: 700 }}>Membros:</Typography>
+  {membros.map((membro) => (
+    <Box key={`${membro.id}-${membro.nome}`}>
+      <MenuItem
+        onClick={() => handleClick(membro.id)}
+        style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}
+      >
+        <Typography>{membro.nome}</Typography>
+        <Typography>{expandedId === membro.id ? '▲' : '▼'}</Typography>
+      </MenuItem>
 
-              <Collapse in={expandedId === membro.id} timeout="auto" unmountOnExit>
-                <Card style={{ margin: '8px 0', backgroundColor: '#f5f5f5' }}>
-                  <CardContent>
-                    <Typography><strong>Nome:</strong> {membro.nome}</Typography>
-                    <Typography><strong>Telefone:</strong> {membro.telefone}</Typography>
-                    <Typography><strong>Email:</strong> {membro.email}</Typography>
-                    <Typography><strong>Responsável:</strong> {membro.responsavel}</Typography>
-                  </CardContent>
-                </Card>
-              </Collapse>
-
-              <Divider />
-            </Box>
-          ))}
+      <Collapse in={expandedId === membro.id} timeout="auto" unmountOnExit>
+        <Card style={{ margin: '8px 0', backgroundColor: '#f5f5f5' }}>
+          <CardContent>
+            <Typography><strong>Nome:</strong> {membro.nome}</Typography>
+            <Typography><strong>Telefone:</strong> {membro.telefone}</Typography>
+            <Typography><strong>Email:</strong> {membro.email}</Typography>
+            <Typography><strong>Responsável:</strong> {membro.responsavel}</Typography>
+          </CardContent>
         </Card>
+      </Collapse>
+
+      <Divider />
+    </Box>
+  ))}
+</Card>
 
         <Card style={{ padding: 10, marginTop: 16 }}>
           <Typography style={{ fontWeight: 700, marginBottom: 8 }}>Adicionar Crismando</Typography>
