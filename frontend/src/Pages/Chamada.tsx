@@ -95,7 +95,10 @@ const Chamada = () => {
                     Iniciar Chamada
                 </Button>
 
-                <Card style={{ padding: 10 }}>
+                <Card style={{ padding: 10, 
+                    marginTop: 8,
+                    maxHeight: 'calc(60vh - 15px)', // Ajuste este valor conforme necessário
+                    overflow: 'auto' }}>
                     <Typography style={{ fontWeight: 700, marginBottom: 2 }}>Membros:</Typography>
 
                     {membros.length > 0 ? membros.map((membro) => (

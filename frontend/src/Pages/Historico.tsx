@@ -46,7 +46,10 @@ const Historico = () => {
             : ' carregando...'}</Typography>
           <Typography>Encontros: {turmaData.encontros}</Typography>        </Stack>
 
-        <Card style={{ padding: 10, marginTop: 10 }}>
+        <Card style={{ padding: 10, 
+                    marginTop: 8,
+                    maxHeight: 'calc(60vh - 15px)', // Ajuste este valor conforme necessário
+                    overflow: 'auto' }}>
           <FormControl size="small" sx={{ minWidth: 120, mb: 2 }}>
             <InputLabel>Data</InputLabel>
             <Select
