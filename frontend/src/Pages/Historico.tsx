@@ -94,8 +94,6 @@ const Historico = () => {
                     <Typography><strong>Data selecionada:</strong> {dataSelecionada}</Typography>
                     <Typography><strong>Nome:</strong> {membro.nome}</Typography>
                     <Typography><strong>Telefone:</strong> {membro.telefone}</Typography>
-                    <Typography><strong>Email:</strong> {membro.email}</Typography>
-                    <Typography><strong>Responsável:</strong> {membro.responsavel}</Typography>
                   </CardContent>
                 </Card>
               </Collapse>
