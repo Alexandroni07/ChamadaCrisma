@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { Catequista, CatequistaContextType } from './Types';
+import { buscarChamada } from '../Pages/services';
 
 const CatequistaContext = createContext<CatequistaContextType>({
   catequista: null,
@@ -8,7 +9,7 @@ const CatequistaContext = createContext<CatequistaContextType>({
 
 export const CatequistaProvider = ({ children }: { children: ReactNode }) => {
   const [catequista, setCatequista] = useState<Catequista | null>(null);
-console.log(catequista)
+
   return (
     <CatequistaContext.Provider value={{ catequista, setCatequista }}>
       {children}

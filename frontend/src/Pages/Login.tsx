@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from './services';
+import { buscarChamada, login } from './services';
 import { LoginPayload } from './types';
 import { useCatequista } from '../context/CatequistaContext';
 
@@ -10,7 +10,7 @@ function Login() {
     const [senha, setSenha] = useState('');
     const [erro, setErro] = useState<string>("");
     const navigate = useNavigate();
-    const { setCatequista } = useCatequista();
+    const { catequista, setCatequista } = useCatequista();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -24,7 +24,14 @@ function Login() {
                 id: usuario?.id,
                 nome: usuario?.nome,
                 id_turma: usuario?.id_turma
-            }); 
+            });
+            const fetchPresencas = async () => {
+                const response = await buscarChamada(usuario?.id_turma);
+                if (response.data) {
+                    localStorage.setItem('chamada', JSON.stringify(response.data));
+                }
+            };
+            fetchPresencas();
             navigate('/');
         } else {
             setErro("Erro ao processar login");

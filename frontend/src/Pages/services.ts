@@ -1,5 +1,5 @@
 import { api, routeApiV1 } from "../services/services";
-import { Catequista, Crismando, DataResultGenericService, Encontros, LoginPayload, PresencaInput } from "./types";
+import { Catequista, Crismando, DataResultGenericService, Encontros, LoginPayload, Presenca, PresencaInput } from "./types";
 import { HttpStatusCode as http } from "../services/enums";
 
 export const adicionarCrismando = async (crismando: Crismando): Promise<Crismando | null> => {
@@ -54,6 +54,22 @@ export const ListarEncontros = async (): Promise<DataResultGenericService<Encont
   const logFunctionName = 'ListarEncontros';
   try {
     const response = await api.get(`${routeApiV1}/encontros`);
+    if (response.status === http.OK) {
+      return response.data;
+    } else {
+      console.log(`Erro: Status de resposta ${response.status} na função ${logFunctionName}`);
+      return response;
+    }
+  } catch (e) {
+    console.log(`Ocorreu um ERRO na função ${logFunctionName}`, e);
+    return e;
+  }
+};
+
+export const buscarChamada = async (idTurma): Promise<DataResultGenericService<Presenca[]>> => {
+  const logFunctionName = 'buscarChamada';
+  try {
+    const response = await api.get(`${routeApiV1}/chamada/${idTurma}`);
     if (response.status === http.OK) {
       return response.data;
     } else {
