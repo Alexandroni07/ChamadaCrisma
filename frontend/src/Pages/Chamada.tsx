@@ -23,7 +23,9 @@ const Chamada = () => {
     const [modalAberto, setModalAberto] = useState(false);
     const [catequistas, setCatequistas] = useState<Catequista[]>([]);
     const [membros, setMembros] = useState<Crismando[]>([]);
-  const { catequista } = useCatequista();
+    const { catequista } = useCatequista();
+    const chamadaString = localStorage.getItem('chamada');
+    const chamadaSalva = chamadaString ? JSON.parse(chamadaString) : null;
 
     const carregarCatequista = async () => {
         const result = await ListarCatequistas(catequista?.id_turma);
@@ -40,10 +42,14 @@ const Chamada = () => {
         }
     };
 
-    useEffect(() => {
-        carregarMembros();
-        carregarCatequista();
-    }, []);
+useEffect(() => {
+    carregarMembros();
+    carregarCatequista();
+
+    if (chamadaSalva && Array.isArray(chamadaSalva)) {
+        setPresenca(chamadaSalva);
+    }
+}, []);
 
     const isPresente = (
         idCrismando: number,
@@ -91,16 +97,19 @@ const Chamada = () => {
                     variant="contained"
                     color="primary"
                     onClick={iniciarChamada}
+                    disabled={presenca.length > 0}
                     fullWidth
                     sx={{ mb: 3 }}
                 >
                     Iniciar Chamada
                 </Button>
 
-                <Card style={{ padding: 10, 
+                <Card style={{
+                    padding: 10,
                     marginTop: 8,
                     maxHeight: 'calc(60vh - 15px)',
-                    overflow: 'auto' }}>
+                    overflow: 'auto'
+                }}>
                     <Typography style={{ fontWeight: 700, marginBottom: 2 }}>Membros:</Typography>
 
                     {membros.length > 0 ? membros.map((membro) => (

@@ -17,7 +17,7 @@ const Historico = () => {
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
-console.log(catequista)
+
   const carregarCatequista = async () => {
     const result = await ListarCatequistas(catequista?.id_turma);
     if (result && result.status === 200) {
@@ -65,7 +65,7 @@ console.log(catequista)
         <Card style={{
           padding: 10,
           marginTop: 10,
-          maxHeight: 'calc(73vh - 15px)', // Ajuste este valor conforme necessário
+          maxHeight: 'calc(73vh - 15px)', 
           overflow: 'auto'
         }}>
           <FormControl size="small" sx={{ minWidth: 120, mb: 2 }}>
@@ -83,7 +83,7 @@ console.log(catequista)
             </Select>
           </FormControl>
 
-          {membros.map((membro) => ( // Alterado de turmaData.membros para membros
+          {membros.map((membro) => (
             <Box key={membro.id}>
               <MenuItem
                 onClick={() => handleClick(membro.id)}

@@ -1,6 +1,6 @@
 import { Box, Button, Checkbox, Divider, FormControlLabel, Grid, Modal, Stack, Typography } from '@mui/material';
 import { ChamadaModalProps } from './types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Presenca, TipoPresenca } from '../Pages/types';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { registrarChamada } from '../Pages/services';
@@ -27,20 +27,20 @@ const ChamadaModal = ({
     }, [modalAberto]);
 
     const handleAvancar = () => {
-    const idsComPresenca = new Set(
-        presenca.map((p) => p.idCrismando)
-    );
+        const idsComPresenca = new Set(
+            presenca.map((p) => p.idCrismando)
+        );
 
-    const proximoIndice = crismandos.findIndex(
-        (c, index) => index > indiceAtual && !idsComPresenca.has(c.id!)
-    );
+        const proximoIndice = crismandos.findIndex(
+            (c, index) => index > indiceAtual && !idsComPresenca.has(c.id!)
+        );
 
-    if (proximoIndice !== -1) {
-        setIndiceAtual(proximoIndice);
-    } else {
-        setModalAberto(false);
-    }
-};
+        if (proximoIndice !== -1) {
+            setIndiceAtual(proximoIndice);
+        } else {
+            setModalAberto(false);
+        }
+    };
 
     const handleVoltar = () => {
         if (indiceAtual > 0) {
@@ -75,11 +75,11 @@ const ChamadaModal = ({
         });
     };
 
-    const salvarChamada = async () => {
+    const salvarChamada = useCallback(async () => {
         try {
             const sucesso = await registrarChamada(turmaData.id_turma, presenca);
             if (sucesso) {
-                alert('Chamada registrada com sucesso!');
+                localStorage.setItem('chamada', JSON.stringify(presenca));
                 setModalAberto(false);
             } else {
                 alert('Erro ao registrar chamada.');
@@ -88,7 +88,7 @@ const ChamadaModal = ({
             alert('Erro ao registrar chamada.');
             console.error(error);
         }
-    };
+    }, [presenca]);
 
     useEffect(() => {
         const crismandoAtual = crismandos[indiceAtual];
@@ -107,7 +107,7 @@ const ChamadaModal = ({
                 p.tipoPresenca === TipoPresenca.MISSA
         );
 
-        if (temCatequese && temMissa) {
+        if (temCatequese && temMissa && indiceAtual < crismandos.length - 1) {
             const timeout = setTimeout(() => {
                 handleAvancar();
             }, 300);
@@ -252,7 +252,7 @@ const ChamadaModal = ({
 
                     <Button
                         onClick={salvarChamada}
-                        disabled={indiceAtual !== crismandos.length}
+                        disabled={indiceAtual !== crismandos.length - 1}
                         variant="contained"
                     >
                         {'Finalizar'}
