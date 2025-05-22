@@ -1,26 +1,25 @@
-import { turmaData, historicoData } from './Shared/data';
-import { Box, Card, Divider, MenuItem, Stack, Typography, Collapse, CardContent, FormControl, InputLabel, Select, Grid, FormControlLabel, Checkbox } from '@mui/material';
+import { Box, Card, Checkbox, Divider, FormControl, FormControlLabel, Grid, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
-import { ListarCatequistas, ListarEncontros, buscarHistorico, listarChamada } from './services';
-import { Catequista, Encontros, Crismando, TipoPresenca, Presenca } from './types';
-import { formatarData } from './commons';
 import { useCatequista } from '../context/CatequistaContext';
+import { formatarData } from './commons';
+import { ListarEncontros, buscarHistorico, listarChamada, recuperarDadosTurma } from './services';
+import { Crismando, Encontros, Presenca, TipoPresenca, TurmaData } from './types';
 
 const Historico = () => {
   const [dataSelecionada, setDataSelecionada] = useState<string>("");
   const [presenca, setPresenca] = useState<Presenca[]>([]);
-  const [catequistas, setCatequistas] = useState<Catequista[]>([]);
+  const [turma, setTurma] = useState<TurmaData>({id: 1, padroeiro: '', catequistas: [], nome: ''});
   const [encontros, setEncontros] = useState<Encontros[]>([]);
   const [membros, setMembros] = useState<Crismando[]>([]);
   const { catequista } = useCatequista();
 
-  const carregarCatequista = async () => {
-    const result = await ListarCatequistas(catequista?.id_turma);
+  const carregarDadosTurma = async () => {
+    const result = await recuperarDadosTurma(catequista?.id_turma);
     if (result && result.status === 200) {
-      setCatequistas(result.data);
+      setTurma(result.data)
     }
   };
-console.log(catequistas)
+
   const carregarMembros = async () => {
     const result = await listarChamada(catequista?.id_turma);
     if (result && result.status === 200) {
@@ -43,7 +42,7 @@ console.log(catequistas)
   }, [dataSelecionada]);
 
   useEffect(() => {
-    carregarCatequista();
+    carregarDadosTurma();
     carregarEncontros();
     carregarMembros();
   }, []);
@@ -74,11 +73,11 @@ console.log(catequistas)
 
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
-          <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>catequistas: {catequistas.length > 0
-            ? ' ' + catequistas.map((c) => c.nome).join(', ')
+          <Typography>Turma: {turma.nome}</Typography>
+          <Typography>catequistas: {turma.catequistas.length > 0
+            ? ' ' + turma.catequistas.map((c) => c.nome).join(', ')
             : ' carregando...'}</Typography>
-          <Typography>Encontros: {turmaData.encontros}</Typography>
+          <Typography>Padroeiro: {turma.padroeiro}</Typography>
         </Stack>
 
         <Card style={{

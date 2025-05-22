@@ -1,5 +1,5 @@
 import { api, routeApiV1 } from "../services/services";
-import { Catequista, Crismando, DataResultGenericService, Encontros, genericItem, LoginPayload, Presenca, PresencaInput } from "./types";
+import { Catequista, Crismando, DataResultGenericService, Encontros, genericItem, LoginPayload, Presenca, PresencaInput, TurmaData } from "./types";
 import { HttpStatusCode as http } from "../services/enums";
 
 export const adicionarCrismando = async (crismando: Crismando): Promise<Crismando | null> => {
@@ -34,10 +34,10 @@ export const listarChamada = async (idTurma): Promise<DataResultGenericService<C
   }
 };
 
-export const ListarCatequistas = async (idTurma): Promise<DataResultGenericService<Catequista[]>> => {
-  const logFunctionName = 'listarCatequistas';
+export const recuperarDadosTurma = async (idTurma): Promise<DataResultGenericService<TurmaData>> => {
+  const logFunctionName = 'recuperarDadosTurma';
   try {
-    const response = await api.get(`${routeApiV1}/catequistas/${idTurma}`);
+    const response = await api.get(`${routeApiV1}/turmas/dados/${idTurma}`);
     if (response.status === http.OK) {
       return response.data;
     } else {
@@ -69,7 +69,7 @@ export const ListarEncontros = async (): Promise<DataResultGenericService<Encont
 export const listarTurmas = async (): Promise<DataResultGenericService<genericItem[]>> => {
   const logFunctionName = 'listarTurmas';
   try {
-    const response = await api.get(`${routeApiV1}/turmas`);
+    const response = await api.get(`${routeApiV1}/selects/turmas`);
     if (response.status === http.OK) {
       return response.data;
     } else {

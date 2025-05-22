@@ -1,26 +1,25 @@
 import { Box, Button, Card, CardContent, Collapse, Divider, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { adicionarCrismando, ListarCatequistas, listarChamada } from './services';
-import { turmaData } from './Shared/data';
-import { Catequista, Crismando } from './types';
 import { useCatequista } from '../context/CatequistaContext';
+import { adicionarCrismando, listarChamada, recuperarDadosTurma } from './services';
+import { Crismando, TurmaData } from './types';
 
 const MinhaTurma = () => {
   const [novoNome, setNovoNome] = useState('');
   const [status, setStatus] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [membros, setMembros] = useState<Crismando[]>([]);
-  const [catequistas, setCatequistas] = useState<Catequista[]>([]);
+  const [turma, setTurma] = useState<TurmaData>({id: 1, padroeiro: '', catequistas: [], nome: ''});
   const { catequista } = useCatequista();
 
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  const carregarCatequista = async () => {
-    const result = await ListarCatequistas(catequista?.id_turma);
+  const carregarDadosTurma = async () => {
+    const result = await recuperarDadosTurma(catequista?.id_turma);
     if (result && result.status === 200) {
-      setCatequistas(result.data);
+      setTurma(result.data)
     }
   };
 
@@ -38,7 +37,7 @@ const MinhaTurma = () => {
     if (!catequista?.id_turma) return;
 
     carregarMembros();
-    carregarCatequista();
+    carregarDadosTurma();
   }, []);
 
   const handleAdicionar = async () => {
@@ -49,7 +48,7 @@ const MinhaTurma = () => {
     }
     const payload = {
       nome: novoNome,
-      id_turma: turmaData.id_turma,
+      id_turma: turma.id,
       responsavel: "",
       email: "",
       telefone: "",
@@ -74,17 +73,17 @@ const MinhaTurma = () => {
       </Card>
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
-          <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>catequistas: {catequistas.length > 0
-            ? ' ' + catequistas.map((c) => c.nome).join(', ')
+          <Typography>Turma: {turma?.nome}</Typography>
+          <Typography>catequistas: {turma.catequistas.length > 0
+            ? ' ' + turma.catequistas.map((c) => c.nome).join(', ')
             : ' carregando...'}</Typography>
-          <Typography>Encontros: {turmaData.encontros}</Typography>
+          <Typography>Padroeiro: {turma.padroeiro}</Typography>
         </Stack>
 
         <Card style={{
           padding: 10,
           marginTop: 10,
-          maxHeight: 'calc(53vh - 15px)', // Ajuste este valor conforme necessário
+          maxHeight: 'calc(53vh - 15px)',
           overflow: 'auto'
         }}>
           <Typography style={{ fontWeight: 700 }}>Membros:</Typography>

@@ -10,27 +10,25 @@ import {
     Stack,
     Typography
 } from '@mui/material';
-import { useEffect, useCallback, useState } from 'react';
-import ChamadaModal from '../modals/ChamadaModal';
-import { turmaData } from './Shared/data';
-import { Crismando, Presenca, TipoPresenca } from './types';
-import { Catequista } from './types';
-import { ListarCatequistas, listarChamada } from './services';
+import { useCallback, useEffect, useState } from 'react';
 import { useCatequista } from '../context/CatequistaContext';
+import ChamadaModal from '../modals/ChamadaModal';
+import { listarChamada, recuperarDadosTurma } from './services';
+import { Crismando, Presenca, TipoPresenca, TurmaData } from './types';
 
 const Chamada = () => {
     const [presenca, setPresenca] = useState<Presenca[]>([]);
     const [modalAberto, setModalAberto] = useState(false);
-    const [catequistas, setCatequistas] = useState<Catequista[]>([]);
+    const [turma, setTurma] = useState<TurmaData>({ id: 1, padroeiro: '', catequistas: [], nome: '' });
     const [membros, setMembros] = useState<Crismando[]>([]);
     const { catequista } = useCatequista();
     const chamadaString = localStorage.getItem('chamada');
     const chamadaSalva = chamadaString ? JSON.parse(chamadaString) : null;
 
-    const carregarCatequista = async () => {
-        const result = await ListarCatequistas(catequista?.id_turma);
+    const carregarDadosTurma = async () => {
+        const result = await recuperarDadosTurma(catequista?.id_turma);
         if (result && result.status === 200) {
-            setCatequistas(result.data);
+            setTurma(result.data)
         }
     };
 
@@ -44,7 +42,7 @@ const Chamada = () => {
 
     useEffect(() => {
         carregarMembros();
-        carregarCatequista();
+        carregarDadosTurma();
 
         if (chamadaSalva && Array.isArray(chamadaSalva)) {
             setPresenca(chamadaSalva);
@@ -86,11 +84,11 @@ const Chamada = () => {
 
             <Box style={{ margin: '0px 32px' }}>
                 <Stack spacing={1} mb={3}>
-                    <Typography>Turma: {turmaData.turma}</Typography>
-                    <Typography>catequistas: {catequistas.length > 0
-                        ? ' ' + catequistas.map((c) => c.nome).join(', ')
+                    <Typography>Turma: {turma.nome}</Typography>
+                    <Typography>catequistas: {turma.catequistas.length > 0
+                        ? ' ' + turma.catequistas.map((c) => c.nome).join(', ')
                         : ' carregando...'}</Typography>
-                    <Typography>Encontros: {turmaData.encontros}</Typography>
+                    <Typography>Padroeiro: {turma.padroeiro}</Typography>
                 </Stack>
 
                 <Button

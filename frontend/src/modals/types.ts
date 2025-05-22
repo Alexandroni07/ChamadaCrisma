@@ -1,4 +1,4 @@
-import { Crismando, Presenca, TurmaData } from "../Pages/types";
+import { Crismando, Presenca } from "../Pages/types";
 
 export interface ChamadaModalProps {
     modalAberto: boolean;

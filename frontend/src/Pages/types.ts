@@ -32,11 +32,10 @@ export type Encontros = {
 }
 
 export type TurmaData = {
-    turma: string;
-    catequista: string;
-    encontros: string;
-    id_turma: number;
-    membros: Crismando[]
+    nome: string;
+    catequistas: Catequista[];
+    padroeiro: string;
+    id: number;
 }
 
 export type Presenca = {
