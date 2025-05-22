@@ -16,6 +16,7 @@ const catequistaRoutes = require('./routes/catequistas');
 const encontroRoutes = require('./routes/encontros');
 const chamadaRoutes = require('./routes/chamada');
 const usuarioRoutes = require('./routes/usuarios');
+const presencaRoutes = require('./routes/presencas');
 const authMiddleware = require('./authMiddleware');
 
 
@@ -24,6 +25,7 @@ app.use('/api/crismandos', authMiddleware, crismandoRoutes);
 app.use('/api/catequistas', authMiddleware, catequistaRoutes);
 app.use('/api/encontros', authMiddleware, encontroRoutes);
 app.use('/api/chamada', authMiddleware, chamadaRoutes);
+app.use('/api', authMiddleware, presencaRoutes);
 app.use('/api', usuarioRoutes);
 
 const port = process.env.PORT || 3000;
