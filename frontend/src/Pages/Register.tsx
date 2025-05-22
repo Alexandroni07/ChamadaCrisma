@@ -1,22 +1,36 @@
 // src/pages/Login.jsx
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from './services';
-import { LoginPayload } from './types';
+import { listarTurmas, register } from './services';
+import { genericItem, LoginPayload } from './types';
+import { MenuItem, Select } from '@mui/material';
 
 function Register() {
+    const [turmas, setTurmas] = useState<genericItem[]>([]);
+    const [turmaSelecionada, setTurmaSelecionada] = useState<number | ''>('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [nome, setNome] = useState('');
     const [erro, setErro] = useState(null);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const carregarEncontros = async () => {
+            const result = await listarTurmas();
+            if (result && result.status === 200) {
+                setTurmas(result.data);
+            }
+        };
+        carregarEncontros();
+    }, [])
+    console.log(turmaSelecionada)
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
             email: email,
             senha: senha,
-            nome: nome
+            nome: nome,
+            idTurma: turmaSelecionada
         } as LoginPayload
         const resultado = await register(payload);
         if (resultado.sucesso) {
@@ -39,6 +53,19 @@ function Register() {
                         onChange={e => setNome(e.target.value)}
                         required
                     />
+                </div>
+                <div>
+                    <label>Turma:</label><br />
+                    <Select
+                        value={turmaSelecionada || ""}
+                        onChange={(e) => setTurmaSelecionada(e.target.value)}
+                        required>
+                        {turmas.map((item) => (
+                            <MenuItem key={item.id} value={item.id}>
+                                {item.nome}
+                            </MenuItem>
+                        ))}
+                    </Select>
                 </div>
                 <div>
                     <label>Email:</label><br />

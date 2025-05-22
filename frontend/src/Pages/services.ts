@@ -1,5 +1,5 @@
 import { api, routeApiV1 } from "../services/services";
-import { Catequista, Crismando, DataResultGenericService, Encontros, LoginPayload, Presenca, PresencaInput } from "./types";
+import { Catequista, Crismando, DataResultGenericService, Encontros, genericItem, LoginPayload, Presenca, PresencaInput } from "./types";
 import { HttpStatusCode as http } from "../services/enums";
 
 export const adicionarCrismando = async (crismando: Crismando): Promise<Crismando | null> => {
@@ -66,6 +66,22 @@ export const ListarEncontros = async (): Promise<DataResultGenericService<Encont
   }
 };
 
+export const listarTurmas = async (): Promise<DataResultGenericService<genericItem[]>> => {
+  const logFunctionName = 'listarTurmas';
+  try {
+    const response = await api.get(`${routeApiV1}/turmas`);
+    if (response.status === http.OK) {
+      return response.data;
+    } else {
+      console.log(`Erro: Status de resposta ${response.status} na função ${logFunctionName}`);
+      return response;
+    }
+  } catch (e) {
+    console.log(`Ocorreu um ERRO na função ${logFunctionName}`, e);
+    return e;
+  }
+};
+
 export const buscarChamada = async (idTurma): Promise<DataResultGenericService<Presenca[]>> => {
   const logFunctionName = 'buscarChamada';
   try {
@@ -85,7 +101,7 @@ export const buscarChamada = async (idTurma): Promise<DataResultGenericService<P
 export const buscarHistorico = async (idTurma, data): Promise<DataResultGenericService<Presenca[]>> => {
   const logFunctionName = 'buscarHistorico';
   try {
-    const response = await api.post(`${routeApiV1}/historico/${idTurma}`, {data: data});
+    const response = await api.post(`${routeApiV1}/presenca/historico/${idTurma}`, {data: data});
     if (response.status === http.OK) {
       return response.data;
     } else {

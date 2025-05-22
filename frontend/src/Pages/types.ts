@@ -4,6 +4,11 @@ export type DataResultGenericService<T> = {
     status?: number;
 };
 
+export type genericItem = {
+    id: number;
+    nome: string;
+}
+
 export type Crismando = {
     nome: string;
     id_turma?: number;
@@ -55,4 +60,5 @@ export type LoginPayload = {
     email: string;
     senha: string;
     nome?: string;
+    idTurma?: number; 
 } 

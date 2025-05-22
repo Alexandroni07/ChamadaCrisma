@@ -7,7 +7,6 @@ import { formatarData } from './commons';
 import { useCatequista } from '../context/CatequistaContext';
 
 const Historico = () => {
-  const [expandedId, setExpandedId] = useState<number | null>(null);
   const [dataSelecionada, setDataSelecionada] = useState<string>("");
   const [presenca, setPresenca] = useState<Presenca[]>([]);
   const [catequistas, setCatequistas] = useState<Catequista[]>([]);
@@ -15,17 +14,13 @@ const Historico = () => {
   const [membros, setMembros] = useState<Crismando[]>([]);
   const { catequista } = useCatequista();
 
-  const handleClick = (id) => {
-    setExpandedId(expandedId === id ? null : id);
-  };
-
   const carregarCatequista = async () => {
     const result = await ListarCatequistas(catequista?.id_turma);
     if (result && result.status === 200) {
       setCatequistas(result.data);
     }
   };
-
+console.log(catequistas)
   const carregarMembros = async () => {
     const result = await listarChamada(catequista?.id_turma);
     if (result && result.status === 200) {
@@ -58,7 +53,6 @@ const Historico = () => {
     fetchHistorico();
   }
 }, [dataSelecionada, catequista?.id_turma, fetchHistorico]);
-
 
   const isPresente = (
     idCrismando: number,
