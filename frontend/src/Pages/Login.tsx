@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { buscarChamada, login } from './services';
 import { LoginPayload } from './types';
 import { useCatequista } from '../context/CatequistaContext';
+import { Alert, Box, Button, Paper, Stack, TextField, Typography } from '@mui/material';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -43,33 +44,58 @@ function Login() {
     }
 
     return (
-        <div style={{ padding: '2rem' }}>
-            <h2>Login</h2>
-            {erro && <p style={{ color: 'red' }}>{erro}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email:</label><br />
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Senha:</label><br />
-                    <input
-                        type="password"
-                        value={senha}
-                        onChange={e => setSenha(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Entrar</button>
-            </form>
-            <p>Não possui Login? <strong><button onClick={handleRegistrar}>Registre-se</button></strong></p>
-        </div>
-    );
+    <Box    
+      height="100vh"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      bgcolor="#f5f5f5"
+    >
+      <Paper elevation={3} sx={{ p: 4, width: 400 }}>
+        <Typography variant="h5" mb={2} align="center">
+          Login
+        </Typography>
+
+        {erro && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {erro}
+          </Alert>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2}>
+            <TextField
+              label="Email"
+              type="email"
+              fullWidth
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+            />
+            <TextField
+              label="Senha"
+              type="password"
+              fullWidth
+              value={senha}
+              onChange={e => setSenha(e.target.value)}
+              required
+            />
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Entrar
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              onClick={() => navigate('/register')}
+            >
+              Registre-se
+            </Button>
+          </Stack>
+        </form>
+      </Paper>
+    </Box>
+  );
 }
 
 export default Login;

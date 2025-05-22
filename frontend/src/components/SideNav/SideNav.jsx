@@ -1,4 +1,5 @@
 import { Box, Button, Divider, Grid, Typography } from '@mui/material';
+import { useCallback } from 'react';
 import { FaHome, FaHistory, FaSignOutAlt, FaCalendarAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -9,9 +10,11 @@ const SideNav = () => {
     navigate(path);
   };
 
-  const handleLogout = () => {
-    console.log("Usuário deslogado")
-  }
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("jwt_token");
+    localStorage.removeItem("chamada");
+    navigate('/login');
+  }, [history]);
 
   return (
     <Grid container direction={"column"}
