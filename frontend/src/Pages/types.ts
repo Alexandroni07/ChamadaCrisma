@@ -50,3 +50,9 @@ export enum TipoPresenca {
     CATEQUESE = 1,
     MISSA = 2
 }
+
+export type LoginPayload = {
+    email: string;
+    senha: string;
+    nome?: string;
+} 

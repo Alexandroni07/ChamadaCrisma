@@ -1,5 +1,5 @@
 import { api, routeApiV1 } from "../services/services";
-import { Catequista, Crismando, DataResultGenericService, Encontros, PresencaInput } from "./types";
+import { Catequista, Crismando, DataResultGenericService, Encontros, LoginPayload, PresencaInput } from "./types";
 import { HttpStatusCode as http } from "../services/enums";
 
 export const adicionarCrismando = async (crismando: Crismando): Promise<Crismando | null> => {
@@ -18,10 +18,10 @@ export const adicionarCrismando = async (crismando: Crismando): Promise<Crismand
   }
 };
 
-export const listarChamada = async (): Promise<DataResultGenericService<Crismando[]>> => {
+export const listarChamada = async (idTurma): Promise<DataResultGenericService<Crismando[]>> => {
   const logFunctionName = 'listarChamada';
   try {
-    const response = await api.get(`${routeApiV1}/crismandos`);
+    const response = await api.get(`${routeApiV1}/crismandos/${idTurma}`);
     if (response.status === http.OK) {
       return response.data;
     } else {
@@ -34,10 +34,10 @@ export const listarChamada = async (): Promise<DataResultGenericService<Crismand
   }
 };
 
-export const ListarCatequistas = async (): Promise<DataResultGenericService<Catequista[]>> => {
+export const ListarCatequistas = async (idTurma): Promise<DataResultGenericService<Catequista[]>> => {
   const logFunctionName = 'listarCatequistas';
   try {
-    const response = await api.get(`${routeApiV1}/catequistas`);
+    const response = await api.get(`${routeApiV1}/catequistas/${idTurma}`);
     if (response.status === http.OK) {
       return response.data;
     } else {
@@ -88,3 +88,29 @@ export const registrarChamada = async (
     return false;
   }
 };
+
+export async function login(loginPayload: LoginPayload) {
+  try {
+    const response = await api.post(`${routeApiV1}/login`, loginPayload);
+    const { token, usuario } = response.data;
+
+    if (token) {
+      localStorage.setItem('jwt_token', token);
+    }
+
+    return { sucesso: true, usuario };
+  } catch (err) {
+    console.error('Erro no login:', err.response?.data || err.message);
+    return { sucesso: false, erro: err.response?.data?.mensagem || 'Erro ao fazer login' };
+  }
+}
+
+export async function register(loginPayload: LoginPayload) {
+  try {
+    const response = await api.post(`${routeApiV1}/register`, loginPayload);
+
+    return { sucesso: true, dados: response.data };
+  } catch (error) {
+    return { sucesso: false, erro: error.response?.data?.erro || 'Erro ao registrar' };
+  }
+}
