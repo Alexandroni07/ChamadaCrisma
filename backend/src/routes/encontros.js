@@ -9,6 +9,7 @@ router.get('/', async (req, res) => {
     const { data, error } = await supabase
       .from('encontros')
       .select('data')
+      .eq('in_tipo', 1)
 
     if (error) {
       throw error;
