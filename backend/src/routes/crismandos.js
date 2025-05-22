@@ -30,11 +30,14 @@ router.post('/', async (req, res) => {
 });
 
 // GET /api/crismandos
-router.get('/', async (req, res) => {
+router.get('/:idTurma', async (req, res) => {
+  const { idTurma } = req.params;
+
   try {
     const { data, error } = await supabase
       .from('crismandos')
       .select('*')
+      .eq('id_turma', Number(idTurma))
       .order('nome', { ascending: true });
 
     if (error) {

@@ -28,14 +28,12 @@ router.post('/registrar', async (req, res) => {
             2: encontroMissa.id
         };
 
-        // Monta os dados para inserção
         const presencasFormatadas = presencas.map(p => ({
             id_encontro: tipoParaEncontro[p.tipoPresenca],
             id_crismando: p.idCrismando,
             presente: p.isPresente
         }));
 
-        // Inserção em lote
         const { error: errorInsert } = await supabase
             .from('presencas')
             .upsert(presencasFormatadas, {
