@@ -44,9 +44,8 @@ router.post('/login', async (req, res) => {
   });
 });
 
-
 router.post('/register', async (req, res) => {
-  const { nome, email, senha } = req.body;
+  const { nome, email, senha, idTurma } = req.body;
 
   if (!email || !senha) {
     return res.status(400).json({ erro: 'Email e senha são obrigatórios' });
@@ -66,17 +65,24 @@ router.post('/register', async (req, res) => {
 
     const hash = await bcrypt.hash(senha, 10);
 
-    const { error: insertError } = await supabase
+    const { error: insertUserError } = await supabase
       .from('usuarios')
-      .insert([{ nome, email, senha: hash }]);
+      .insert([{ nome, email, senha: hash, id_turma: idTurma }]);
 
-    if (insertError) throw insertError;
+    if (insertUserError) throw insertUserError;
 
-    return res.status(201).json({ mensagem: 'Usuário cadastrado com sucesso' });
+    const { error: insertCatequistaError } = await supabase
+      .from('catequistas')
+      .insert([{ nome, id_turma: idTurma }]);
+
+    if (insertCatequistaError) throw insertCatequistaError;
+
+    return res.status(201).json({ mensagem: 'Usuário e catequista cadastrados com sucesso' });
   } catch (err) {
-    console.error('Erro ao registrar usuário:', err);
-    return res.status(500).json({ erro: 'Erro ao registrar usuário.' });
+    console.error('Erro ao registrar usuário e catequista:', err);
+    return res.status(500).json({ erro: 'Erro ao registrar usuário e catequista.' });
   }
 });
+
 
 module.exports = router;
