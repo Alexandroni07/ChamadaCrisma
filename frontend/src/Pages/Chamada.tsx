@@ -42,14 +42,14 @@ const Chamada = () => {
         }
     };
 
-useEffect(() => {
-    carregarMembros();
-    carregarCatequista();
+    useEffect(() => {
+        carregarMembros();
+        carregarCatequista();
 
-    if (chamadaSalva && Array.isArray(chamadaSalva)) {
-        setPresenca(chamadaSalva);
-    }
-}, []);
+        if (chamadaSalva && Array.isArray(chamadaSalva)) {
+            setPresenca(chamadaSalva);
+        }
+    }, []);
 
     const isPresente = (
         idCrismando: number,

@@ -82,6 +82,22 @@ export const buscarChamada = async (idTurma): Promise<DataResultGenericService<P
   }
 };
 
+export const buscarHistorico = async (idTurma, data): Promise<DataResultGenericService<Presenca[]>> => {
+  const logFunctionName = 'buscarHistorico';
+  try {
+    const response = await api.post(`${routeApiV1}/historico/${idTurma}`, {data: data});
+    if (response.status === http.OK) {
+      return response.data;
+    } else {
+      console.log(`Erro: Status de resposta ${response.status} na função ${logFunctionName}`);
+      return response;
+    }
+  } catch (e) {
+    console.log(`Ocorreu um ERRO na função ${logFunctionName}`, e);
+    return e;
+  }
+};
+
 export const registrarChamada = async (
   idTurma: number,
   presencas: PresencaInput[]
