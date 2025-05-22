@@ -16,22 +16,24 @@ import { turmaData } from './Shared/data';
 import { Crismando, Presenca, TipoPresenca } from './types';
 import { Catequista } from './types';
 import { ListarCatequistas, listarChamada } from './services';
+import { useCatequista } from '../context/CatequistaContext';
 
 const Chamada = () => {
     const [presenca, setPresenca] = useState<Presenca[]>([]);
     const [modalAberto, setModalAberto] = useState(false);
-    const [catequista, setCatequista] = useState<Catequista[]>([]);
+    const [catequistas, setCatequistas] = useState<Catequista[]>([]);
     const [membros, setMembros] = useState<Crismando[]>([]);
+  const { catequista } = useCatequista();
 
     const carregarCatequista = async () => {
-        const result = await ListarCatequistas();
+        const result = await ListarCatequistas(catequista?.id_turma);
         if (result && result.status === 200) {
-            setCatequista(result.data);
+            setCatequistas(result.data);
         }
     };
 
     const carregarMembros = async () => {
-        const result = await listarChamada();
+        const result = await listarChamada(catequista?.id_turma);
         console.log(result)
         if (result && result.status === 200) {
             setMembros(result.data);
@@ -79,8 +81,8 @@ const Chamada = () => {
             <Box style={{ margin: '0px 32px' }}>
                 <Stack spacing={1} mb={3}>
                     <Typography>Turma: {turmaData.turma}</Typography>
-                    <Typography>catequistas: {catequista.length > 0
-                        ? ' ' + catequista.map((c) => c.nome).join(', ')
+                    <Typography>catequistas: {catequistas.length > 0
+                        ? ' ' + catequistas.map((c) => c.nome).join(', ')
                         : ' carregando...'}</Typography>
                     <Typography>Encontros: {turmaData.encontros}</Typography>
                 </Stack>
@@ -97,7 +99,7 @@ const Chamada = () => {
 
                 <Card style={{ padding: 10, 
                     marginTop: 8,
-                    maxHeight: 'calc(60vh - 15px)', // Ajuste este valor conforme necessário
+                    maxHeight: 'calc(60vh - 15px)',
                     overflow: 'auto' }}>
                     <Typography style={{ fontWeight: 700, marginBottom: 2 }}>Membros:</Typography>
 

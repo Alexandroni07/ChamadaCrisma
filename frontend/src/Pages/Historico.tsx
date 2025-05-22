@@ -4,27 +4,29 @@ import { useEffect, useState } from 'react';
 import { ListarCatequistas, ListarEncontros, listarChamada } from './services';
 import { Catequista, Encontros, Crismando } from './types';
 import { formatarData } from './commons';
+import { useCatequista } from '../context/CatequistaContext';
 
 const Historico = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [dataSelecionada, setDataSelecionada] = useState<string>("");
-  const [catequista, setCatequista] = useState<Catequista[]>([]);
+  const [catequistas, setCatequistas] = useState<Catequista[]>([]);
   const [encontros, setEncontros] = useState<Encontros[]>([]);
   const [membros, setMembros] = useState<Crismando[]>([]);
+  const { catequista } = useCatequista();
 
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
-
+console.log(catequista)
   const carregarCatequista = async () => {
-    const result = await ListarCatequistas();
+    const result = await ListarCatequistas(catequista?.id_turma);
     if (result && result.status === 200) {
-      setCatequista(result.data);
+      setCatequistas(result.data);
     }
   };
 
-   const carregarMembros = async () => {
-    const result = await listarChamada();
+  const carregarMembros = async () => {
+    const result = await listarChamada(catequista?.id_turma);
     if (result && result.status === 200) {
       setMembros(result.data);
     }
@@ -54,15 +56,18 @@ const Historico = () => {
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
           <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>catequistas: {catequista.length > 0
-            ? ' ' + catequista.map((c) => c.nome).join(', ')
+          <Typography>catequistas: {catequistas.length > 0
+            ? ' ' + catequistas.map((c) => c.nome).join(', ')
             : ' carregando...'}</Typography>
-          <Typography>Encontros: {turmaData.encontros}</Typography>        </Stack>
+          <Typography>Encontros: {turmaData.encontros}</Typography>
+        </Stack>
 
-        <Card style={{ padding: 10, 
+        <Card style={{
+          padding: 10,
           marginTop: 10,
           maxHeight: 'calc(73vh - 15px)', // Ajuste este valor conforme necessário
-          overflow: 'auto'}}>
+          overflow: 'auto'
+        }}>
           <FormControl size="small" sx={{ minWidth: 120, mb: 2 }}>
             <InputLabel>Data</InputLabel>
             <Select

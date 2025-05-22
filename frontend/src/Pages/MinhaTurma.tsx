@@ -3,27 +3,29 @@ import { useEffect, useState } from 'react';
 import { adicionarCrismando, ListarCatequistas, listarChamada } from './services';
 import { turmaData } from './Shared/data';
 import { Catequista, Crismando } from './types';
+import { useCatequista } from '../context/CatequistaContext';
 
 const MinhaTurma = () => {
   const [novoNome, setNovoNome] = useState('');
   const [status, setStatus] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [membros, setMembros] = useState<Crismando[]>([]);
-  const [catequista, setCatequista] = useState<Catequista[]>([]);
+  const [catequistas, setCatequistas] = useState<Catequista[]>([]);
+  const { catequista } = useCatequista();
 
   const handleClick = (id) => {
     setExpandedId(expandedId === id ? null : id);
   };
 
   const carregarCatequista = async () => {
-    const result = await ListarCatequistas();
+    const result = await ListarCatequistas(catequista?.id_turma);
     if (result && result.status === 200) {
-      setCatequista(result.data);
+      setCatequistas(result.data);
     }
   };
 
   const carregarMembros = async () => {
-    const result = await listarChamada();
+    const result = await listarChamada(catequista?.id_turma);
     console.log(result)
     if (result && result.status === 200) {
       setMembros(result.data);
@@ -33,6 +35,8 @@ const MinhaTurma = () => {
   };
 
   useEffect(() => {
+    if (!catequista?.id_turma) return;
+
     carregarMembros();
     carregarCatequista();
   }, []);
@@ -71,14 +75,14 @@ const MinhaTurma = () => {
       <Box style={{ margin: '0px 32px' }}>
         <Stack spacing={1}>
           <Typography>Turma: {turmaData.turma}</Typography>
-          <Typography>catequistas: {catequista.length > 0
-            ? ' ' + catequista.map((c) => c.nome).join(', ')
+          <Typography>catequistas: {catequistas.length > 0
+            ? ' ' + catequistas.map((c) => c.nome).join(', ')
             : ' carregando...'}</Typography>
           <Typography>Encontros: {turmaData.encontros}</Typography>
         </Stack>
 
-        <Card style={{ 
-          padding: 10, 
+        <Card style={{
+          padding: 10,
           marginTop: 10,
           maxHeight: 'calc(53vh - 15px)', // Ajuste este valor conforme necessário
           overflow: 'auto'
