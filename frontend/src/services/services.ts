@@ -4,7 +4,7 @@ export const api = axios.create({
 	withCredentials: true,
 	timeout: 60000,
 	headers: { "Content-Type": "application/json" },
-	baseURL: "http://localhost:3000",
+	baseURL: import.meta.env.VITE_API_URL,
 });
 
 api.interceptors.request.use((config) => {
