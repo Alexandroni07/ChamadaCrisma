@@ -25,7 +25,6 @@ const MinhaTurma = () => {
 
   const carregarMembros = async () => {
     const result = await listarChamada(catequista?.id_turma);
-    console.log(result)
     if (result && result.status === 200) {
       setMembros(result.data);
     } else {

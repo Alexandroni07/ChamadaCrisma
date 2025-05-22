@@ -23,7 +23,7 @@ function Register() {
         };
         carregarEncontros();
     }, [])
-    console.log(turmaSelecionada)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = {
