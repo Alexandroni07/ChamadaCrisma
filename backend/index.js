@@ -11,14 +11,14 @@ app.use(cors({
 }));
 
 require('dotenv').config();
-const crismandoRoutes = require('./routes/crismandos');
-const encontroRoutes = require('./routes/encontros');
-const chamadaRoutes = require('./routes/chamada');
-const usuarioRoutes = require('./routes/usuarios');
-const turmaRoutes = require('./routes/turmas');
-const selectRoutes = require('./routes/selects');
-const presencaRoutes = require('./routes/presencas');
-const authMiddleware = require('./authMiddleware');
+const crismandoRoutes = require('./src/routes/crismandos');
+const encontroRoutes = require('./src/routes/encontros');
+const chamadaRoutes = require('./src/routes/chamada');
+const usuarioRoutes = require('./src/routes/usuarios');
+const turmaRoutes = require('./src/routes/turmas');
+const selectRoutes = require('./src/routes/selects');
+const presencaRoutes = require('./src/routes/presencas');
+const authMiddleware = require('./src/authMiddleware');
 
 app.use(express.json());
 app.use('/api/crismandos', authMiddleware, crismandoRoutes);

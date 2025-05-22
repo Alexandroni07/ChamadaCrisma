@@ -30,7 +30,7 @@ coverage/
 
 # Local env files and config
 *.local
-
+*yarn.lock
 # Editor settings
 .vscode/
 !.vscode/extensions.json
